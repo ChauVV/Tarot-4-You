@@ -45,3 +45,26 @@ export function buildReadingMessages(
     { role: 'user', content: user },
   ]
 }
+
+/** Build the chat messages for an AI "Card of the Day" interpretation. */
+export function buildCotdMessages(
+  lang: Lang,
+  drawn: { card: { name: { vi: string; en: string }; id: string }; reversed: boolean },
+): ChatMessage[] {
+  const ori = lang === 'vi' ? (drawn.reversed ? 'ngược' : 'xuôi') : drawn.reversed ? 'reversed' : 'upright'
+
+  const system =
+    lang === 'vi'
+      ? `Bạn là một người đọc bài Tarot ấm áp, sâu sắc, thực tế và SÚC TÍCH. Trả lời hoàn toàn bằng tiếng Việt, văn xuôi thuần — KHÔNG dùng markdown, KHÔNG dấu ** in đậm, KHÔNG tiêu đề hay gạch đầu dòng. Viết gọn trong 2 đoạn ngắn. Nhấn mạnh Tarot là công cụ phản chiếu, không phải lời phán quyết.`
+      : `You are a warm, insightful, practical, and CONCISE Tarot reader. Respond entirely in English in plain prose — NO markdown, NO ** bold, NO headings or bullet points. Keep it to about 2 short paragraphs. Emphasize that Tarot is a tool for reflection, not a verdict.`
+
+  const user =
+    lang === 'vi'
+      ? `Hôm nay là ${new Date().toLocaleDateString('vi-VN', { dateStyle: 'full' })}.\nLá bài của ngày: ${drawn.card.name.vi} (${ori}).\n\nHãy luận giải lá bài này như một thông điệp cho ngày hôm nay, đưa lời khuyên thực tế.`
+      : `Today is ${new Date().toLocaleDateString('en-US', { dateStyle: 'full' })}.\nCard of the Day: ${drawn.card.name.en} (${ori}).\n\nPlease interpret this card as a message for today, with practical advice.`
+
+  return [
+    { role: 'system', content: system },
+    { role: 'user', content: user },
+  ]
+}
