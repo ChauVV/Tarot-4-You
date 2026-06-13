@@ -846,6 +846,113 @@ img {
   line-height: 1.6;
   color: var(--text);
   margin: 0;
+  white-space: pre-wrap;
+}
+.summary-head {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  position: relative;
+}
+.summary-head .summary-title {
+  margin-bottom: 10px;
+}
+.ai-badge {
+  margin-left: 8px;
+  font-family: var(--font-body);
+  font-size: 0.66rem;
+  letter-spacing: 0.5px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--accent-2) 22%, transparent);
+  color: var(--accent-2);
+  vertical-align: middle;
+}
+.summary-head .ai-disconnect {
+  position: absolute;
+  right: 0;
+  top: 2px;
+}
+.summary-action {
+  margin-top: 14px;
+}
+
+/* AI reading panel */
+.ai-panel {
+  margin: 18px auto 0;
+  max-width: 640px;
+  padding: 20px 24px;
+  border-radius: var(--radius);
+  border: 1px solid var(--accent-2);
+  background:
+    radial-gradient(140% 120% at 50% 0%, color-mix(in srgb, var(--accent-2) 16%, transparent), transparent 70%),
+    var(--surface);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(8px);
+}
+.ai-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.ai-head .summary-title {
+  color: var(--accent-2);
+}
+.ai-disconnect {
+  background: none;
+  border: none;
+  color: var(--text-dim);
+  font-size: 0.8rem;
+  cursor: pointer;
+  text-decoration: underline;
+}
+.ai-intro {
+  color: var(--text-dim);
+  font-size: 0.95rem;
+  margin: 4px 0 14px;
+}
+.ai-text {
+  font-family: var(--font-serif);
+  font-size: 1.12rem;
+  line-height: 1.7;
+  color: var(--text);
+  margin: 6px 0 14px;
+  white-space: pre-wrap;
+}
+.ai-error {
+  color: var(--danger);
+  margin: 6px 0 12px;
+}
+.ai-thinking {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--text-dim);
+  font-style: italic;
+  margin: 8px 0;
+}
+.ai-dots {
+  display: inline-flex;
+  gap: 4px;
+}
+.ai-dots span {
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: var(--accent-2);
+  animation: ai-bounce 1.2s infinite ease-in-out;
+}
+.ai-dots span:nth-child(2) {
+  animation-delay: 0.15s;
+}
+.ai-dots span:nth-child(3) {
+  animation-delay: 0.3s;
+}
+@keyframes ai-bounce {
+  0%, 80%, 100% { transform: scale(0.5); opacity: 0.4; }
+  40% { transform: scale(1); opacity: 1; }
 }
 
 /* ============================================================

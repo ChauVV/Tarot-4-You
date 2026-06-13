@@ -55,6 +55,24 @@ export const UI = {
   tapToFlip: { vi: 'Chạm để lật', en: 'Tap to flip' },
   summary: { vi: 'Tổng kết', en: 'Summary' },
 
+  // AI reader (optional, via OpenRouter)
+  aiTitle: { vi: 'Giải bằng AI', en: 'AI reading' },
+  aiIntro: {
+    vi: 'Muốn một lời giải cá nhân hóa, mạch lạc hơn theo đúng câu hỏi của bạn? Kết nối tài khoản OpenRouter (miễn phí) để giải bằng AI.',
+    en: 'Want a more personalized, flowing reading tailored to your question? Connect your OpenRouter account (free) for an AI interpretation.',
+  },
+  aiConnect: { vi: 'Kết nối AI', en: 'Connect AI' },
+  aiConnecting: { vi: 'Đang kết nối…', en: 'Connecting…' },
+  aiRun: { vi: '✨ Giải bằng AI', en: '✨ Interpret with AI' },
+  aiThinking: { vi: 'AI đang luận giải…', en: 'The AI is interpreting…' },
+  aiRegenerate: { vi: 'Giải lại', en: 'Regenerate' },
+  aiDisconnect: { vi: 'Ngắt kết nối AI', en: 'Disconnect AI' },
+  aiError: {
+    vi: 'Có lỗi khi gọi AI. Có thể model miễn phí đang quá tải — hãy thử lại.',
+    en: 'Something went wrong calling the AI. The free model may be busy — please try again.',
+  },
+  aiConnected: { vi: 'Đã kết nối OpenRouter', en: 'OpenRouter connected' },
+
   // Journal
   journalEmpty: {
     vi: 'Chưa có lượt xem nào được lưu. Hãy bắt đầu một quẻ bói!',

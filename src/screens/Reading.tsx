@@ -3,11 +3,11 @@ import { useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import Layout from '../components/Layout'
 import TarotCardView from '../components/TarotCardView'
+import AIReadingPanel from '../components/AIReadingPanel'
 import { useLang } from '../context/LanguageContext'
 import { useReading } from '../context/ReadingContext'
 import { getSpread } from '../data/spreads'
 import { useJournal, makeId } from '../hooks/useJournal'
-import { summarize } from '../utils/summary'
 import { deepInterpret } from '../utils/interpret'
 
 export default function Reading() {
@@ -122,19 +122,13 @@ export default function Reading() {
           })}
         </div>
 
-        <AnimatePresence>
-          {allFlipped && (
-            <motion.section
-              className="reading-summary"
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-            >
-              <h3 className="summary-title">✦ {t('summary')} ✦</h3>
-              <p className="summary-text">{bi(summarize(drawn, spread))}</p>
-            </motion.section>
-          )}
-        </AnimatePresence>
+        <AIReadingPanel
+          active={allFlipped}
+          topic={topic}
+          question={question}
+          spread={spread}
+          drawn={drawn}
+        />
 
         <div className="screen-actions column">
           {!allFlipped && (
