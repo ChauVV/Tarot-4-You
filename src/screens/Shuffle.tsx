@@ -110,10 +110,11 @@ export default function Shuffle() {
                   onClick={() => toggle(i)}
                   aria-pressed={isSel}
                   initial={{ rotate: 0, scale: 0.6, opacity: 0 }}
-                  animate={{ rotate: rot, scale: 1, opacity: 1, y: isSel ? -30 : 0 }}
-                  whileHover={{ y: isSel ? -30 : -14 }}
+                  animate={{ rotate: rot, scale: 1, opacity: 1, y: isSel ? -40 : 0 }}
+                  whileHover={{ y: isSel ? -40 : -18 }}
                   transition={{ type: 'spring', stiffness: 120, damping: 16, delay: i * 0.012 }}
-                  style={{ zIndex: isSel ? 100 : i }}
+                  transformTemplate={({ rotate, y, scale }) => `rotate(${rotate || '0deg'}) translateY(${y || '0px'}) scale(${scale || 1})`}
+                  style={{ zIndex: i }}
                 >
                   <img src={CARD_BACK} alt="" draggable={false} />
                   {isSel && <span className="deck-badge">{order + 1}</span>}

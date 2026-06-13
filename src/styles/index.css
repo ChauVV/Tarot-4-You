@@ -677,7 +677,7 @@ img {
   position: relative;
   width: 100%;
   height: clamp(300px, 72vw, 360px);
-  margin: 0 0 66px;
+  margin: 0 0 130px;
   /* One soft shadow for the whole fan instead of 78 stacked card shadows. */
   filter: drop-shadow(0 16px 30px rgba(0, 0, 0, 0.45));
 }
@@ -686,7 +686,7 @@ img {
   --dw: clamp(78px, 19vw, 118px);
   position: absolute;
   left: 50%;
-  bottom: 84px;
+  bottom: 124px;
   width: var(--dw);
   margin-left: calc(var(--dw) / -2);
   aspect-ratio: var(--card-ratio);
