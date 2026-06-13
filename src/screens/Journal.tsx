@@ -1,18 +1,33 @@
+import { useState } from 'react'
+import { AnimatePresence, motion } from 'framer-motion'
 import Layout from '../components/Layout'
+import TarotCardView from '../components/TarotCardView'
 import { useLang } from '../context/LanguageContext'
 import { useJournal } from '../hooks/useJournal'
 import { getCard } from '../data/cards'
 import { getSpread, TOPICS } from '../data/spreads'
-import type { Topic } from '../types'
+import { summarize } from '../utils/summary'
+import type { DrawnCard, JournalEntry, Topic } from '../types'
 
 function topicLabel(id: Topic, lang: 'vi' | 'en') {
   const tp = TOPICS.find((x) => x.id === id)
   return tp ? tp.label[lang] : id
 }
 
+/** Rebuild the drawn cards (card + orientation) from a stored entry. */
+function reconstruct(entry: JournalEntry): DrawnCard[] {
+  return entry.cards
+    .map((c) => {
+      const card = getCard(c.cardId)
+      return card ? { card, reversed: c.reversed } : null
+    })
+    .filter((d): d is DrawnCard => d !== null)
+}
+
 export default function Journal() {
   const { t, bi, lang } = useLang()
   const { entries, remove, clear } = useJournal()
+  const [openId, setOpenId] = useState<string | null>(null)
 
   const fmt = (iso: string) =>
     new Date(iso).toLocaleString(lang === 'vi' ? 'vi-VN' : 'en-US', {
@@ -43,6 +58,8 @@ export default function Journal() {
           <ul className="journal-list">
             {entries.map((e) => {
               const spread = getSpread(e.spreadId)
+              const drawn = reconstruct(e)
+              const open = openId === e.id
               return (
                 <li key={e.id} className="journal-entry">
                   <div className="entry-meta">
@@ -52,32 +69,76 @@ export default function Journal() {
                   {e.question.trim() && <p className="entry-question">“{e.question.trim()}”</p>}
                   {spread && <p className="entry-spread">{bi(spread.name)}</p>}
 
-                  <div className="entry-cards">
-                    {e.cards.map((c, i) => {
-                      const card = getCard(c.cardId)
-                      if (!card) return null
-                      return (
+                  {!open && (
+                    <div className="entry-cards">
+                      {drawn.map((d, i) => (
                         <figure key={i} className="entry-card">
                           <img
-                            src={card.image}
-                            alt={bi(card.name)}
-                            style={{ transform: c.reversed ? 'rotate(180deg)' : undefined }}
+                            src={d.card.image}
+                            alt={bi(d.card.name)}
+                            style={{ transform: d.reversed ? 'rotate(180deg)' : undefined }}
                           />
                           <figcaption>
-                            {bi(card.name)}
-                            <span className={c.reversed ? 'rev' : 'up'}>
-                              {' '}
-                              · {c.reversed ? t('reversed') : t('upright')}
+                            {bi(d.card.name)}
+                            <span className={d.reversed ? 'rev' : 'up'}>
+                              {' · '}
+                              {d.reversed ? t('reversed') : t('upright')}
                             </span>
                           </figcaption>
                         </figure>
-                      )
-                    })}
-                  </div>
+                      ))}
+                    </div>
+                  )}
 
-                  <button className="btn btn-ghost small danger" onClick={() => remove(e.id)}>
-                    {t('delete')}
-                  </button>
+                  <AnimatePresence initial={false}>
+                    {open && spread && (
+                      <motion.div
+                        className="entry-detail"
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: 'auto' }}
+                        exit={{ opacity: 0, height: 0 }}
+                        transition={{ duration: 0.35 }}
+                      >
+                        <div className={`reading-spread layout-${spread.layout}`}>
+                          {drawn.map((d, i) => {
+                            const pos = spread.positions[i]
+                            const m = d.reversed ? d.card.reversed : d.card.upright
+                            return (
+                              <div key={i} className="reading-slot">
+                                {pos && (
+                                  <>
+                                    <span className="pos-title">{bi(pos.title)}</span>
+                                    <span className="pos-hint">{bi(pos.hint)}</span>
+                                  </>
+                                )}
+                                <TarotCardView drawn={d} faceUp showLabel />
+                                <div className="interp interp-static">
+                                  <p className="interp-keywords">
+                                    <span className="kw-label">{t('keywords')}:</span> {bi(m.keywords)}
+                                  </p>
+                                  <p className="interp-text">{bi(m.text)}</p>
+                                </div>
+                              </div>
+                            )
+                          })}
+                        </div>
+
+                        <div className="reading-summary">
+                          <h4 className="summary-title">✦ {t('summary')} ✦</h4>
+                          <p className="summary-text">{bi(summarize(drawn, spread))}</p>
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+
+                  <div className="entry-actions">
+                    <button className="btn btn-ghost small" onClick={() => setOpenId(open ? null : e.id)}>
+                      {open ? t('hideDetails') : t('viewDetails')}
+                    </button>
+                    <button className="btn btn-ghost small danger" onClick={() => remove(e.id)}>
+                      {t('delete')}
+                    </button>
+                  </div>
                 </li>
               )
             })}
