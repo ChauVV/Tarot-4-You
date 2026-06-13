@@ -36,8 +36,8 @@ export const UI = {
   // Draw
   drawTitle: { vi: 'Rút bài', en: 'Draw your cards' },
   drawHint: {
-    vi: 'Chạm vào các lá bài đang úp để chọn',
-    en: 'Tap the face-down cards to choose',
+    vi: 'Cả bộ 78 lá đang úp — vuốt ngang để xem, chạm để chọn theo trực giác',
+    en: 'All 78 cards face-down — swipe sideways to browse, tap to choose by intuition',
   },
   selected: { vi: 'Đã chọn', en: 'Selected' },
   reveal: { vi: 'Lật bài & giải', en: 'Reveal & interpret' },

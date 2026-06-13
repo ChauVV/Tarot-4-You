@@ -12,11 +12,14 @@ export function shuffle<T>(arr: readonly T[]): T[] {
 }
 
 /** Probability a card lands reversed. */
-const REVERSED_CHANCE = 0.4
+export const REVERSED_CHANCE = 0.4
+
+/** A full 78-card deck, shuffled, each card pre-assigned an orientation. */
+export function buildShuffledDeck(): DrawnCard[] {
+  return shuffle(DECK).map((card) => ({ card, reversed: Math.random() < REVERSED_CHANCE }))
+}
 
 /** Draw `count` distinct cards from a freshly shuffled deck, each with a chance of being reversed. */
 export function drawCards(count: number): DrawnCard[] {
-  return shuffle(DECK)
-    .slice(0, count)
-    .map((card) => ({ card, reversed: Math.random() < REVERSED_CHANCE }))
+  return buildShuffledDeck().slice(0, count)
 }

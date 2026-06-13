@@ -18,6 +18,7 @@ export default function Reading() {
   const { add } = useJournal()
 
   const [flipped, setFlipped] = useState<boolean[]>(() => drawn.map(() => false))
+  const [deepOpen, setDeepOpen] = useState<boolean[]>(() => drawn.map(() => false))
   const [savedId, setSavedId] = useState<string | null>(null)
 
   useEffect(() => {
@@ -27,6 +28,7 @@ export default function Reading() {
   if (!drawn.length || !spread) return null
 
   const flip = (i: number) => setFlipped((p) => p.map((v, idx) => (idx === i ? true : v)))
+  const toggleDeep = (i: number) => setDeepOpen((p) => p.map((v, idx) => (idx === i ? !v : v)))
   const flipAll = () => setFlipped(drawn.map(() => true))
   const allFlipped = flipped.every(Boolean)
 
@@ -90,8 +92,27 @@ export default function Reading() {
                       </p>
                       <p className="interp-text">{bi(m.text)}</p>
                       <div className="interp-deep">
-                        <span className="deep-label">✦ {t('inDepth')}</span>
-                        <p className="interp-text">{bi(deepInterpret(d, pos, topic))}</p>
+                        <button
+                          className="deep-toggle"
+                          onClick={() => toggleDeep(i)}
+                          aria-expanded={deepOpen[i]}
+                        >
+                          <span className="deep-label">✦ {t('inDepth')}</span>
+                          <span className={`deep-chevron ${deepOpen[i] ? 'open' : ''}`}>›</span>
+                        </button>
+                        <AnimatePresence>
+                          {deepOpen[i] && (
+                            <motion.div
+                              className="deep-body"
+                              initial={{ opacity: 0, height: 0 }}
+                              animate={{ opacity: 1, height: 'auto' }}
+                              exit={{ opacity: 0, height: 0 }}
+                              transition={{ duration: 0.3 }}
+                            >
+                              <p className="interp-text">{bi(deepInterpret(d, pos, topic))}</p>
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
                       </div>
                     </motion.div>
                   )}

@@ -29,6 +29,15 @@ export default function Journal() {
   const { t, bi, lang } = useLang()
   const { entries, remove, clear } = useJournal()
   const [openId, setOpenId] = useState<string | null>(null)
+  const [deepKeys, setDeepKeys] = useState<Set<string>>(() => new Set())
+
+  const toggleDeep = (key: string) =>
+    setDeepKeys((prev) => {
+      const next = new Set(prev)
+      if (next.has(key)) next.delete(key)
+      else next.add(key)
+      return next
+    })
 
   const fmt = (iso: string) =>
     new Date(iso).toLocaleString(lang === 'vi' ? 'vi-VN' : 'en-US', {
@@ -119,8 +128,29 @@ export default function Journal() {
                                   </p>
                                   <p className="interp-text">{bi(m.text)}</p>
                                   <div className="interp-deep">
-                                    <span className="deep-label">✦ {t('inDepth')}</span>
-                                    <p className="interp-text">{bi(deepInterpret(d, pos, e.topic))}</p>
+                                    <button
+                                      className="deep-toggle"
+                                      onClick={() => toggleDeep(`${e.id}:${i}`)}
+                                      aria-expanded={deepKeys.has(`${e.id}:${i}`)}
+                                    >
+                                      <span className="deep-label">✦ {t('inDepth')}</span>
+                                      <span className={`deep-chevron ${deepKeys.has(`${e.id}:${i}`) ? 'open' : ''}`}>
+                                        ›
+                                      </span>
+                                    </button>
+                                    <AnimatePresence>
+                                      {deepKeys.has(`${e.id}:${i}`) && (
+                                        <motion.div
+                                          className="deep-body"
+                                          initial={{ opacity: 0, height: 0 }}
+                                          animate={{ opacity: 1, height: 'auto' }}
+                                          exit={{ opacity: 0, height: 0 }}
+                                          transition={{ duration: 0.3 }}
+                                        >
+                                          <p className="interp-text">{bi(deepInterpret(d, pos, e.topic))}</p>
+                                        </motion.div>
+                                      )}
+                                    </AnimatePresence>
                                   </div>
                                 </div>
                               </div>
