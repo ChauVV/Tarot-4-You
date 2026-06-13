@@ -47,6 +47,8 @@ export const UI = {
   upright: { vi: 'Xuôi', en: 'Upright' },
   reversed: { vi: 'Ngược', en: 'Reversed' },
   keywords: { vi: 'Từ khóa', en: 'Keywords' },
+  overview: { vi: 'Tổng quan', en: 'Overview' },
+  inDepth: { vi: 'Diễn giải sâu', en: 'In-depth reading' },
   saveToJournal: { vi: 'Lưu vào nhật ký', en: 'Save to journal' },
   saved: { vi: 'Đã lưu ✓', en: 'Saved ✓' },
   newReading: { vi: 'Xem quẻ mới', en: 'New reading' },

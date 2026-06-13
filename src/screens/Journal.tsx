@@ -7,6 +7,7 @@ import { useJournal } from '../hooks/useJournal'
 import { getCard } from '../data/cards'
 import { getSpread, TOPICS } from '../data/spreads'
 import { summarize } from '../utils/summary'
+import { deepInterpret } from '../utils/interpret'
 import type { DrawnCard, JournalEntry, Topic } from '../types'
 
 function topicLabel(id: Topic, lang: 'vi' | 'en') {
@@ -117,6 +118,10 @@ export default function Journal() {
                                     <span className="kw-label">{t('keywords')}:</span> {bi(m.keywords)}
                                   </p>
                                   <p className="interp-text">{bi(m.text)}</p>
+                                  <div className="interp-deep">
+                                    <span className="deep-label">✦ {t('inDepth')}</span>
+                                    <p className="interp-text">{bi(deepInterpret(d, pos, e.topic))}</p>
+                                  </div>
                                 </div>
                               </div>
                             )

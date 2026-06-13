@@ -8,6 +8,7 @@ import { useReading } from '../context/ReadingContext'
 import { getSpread } from '../data/spreads'
 import { useJournal, makeId } from '../hooks/useJournal'
 import { summarize } from '../utils/summary'
+import { deepInterpret } from '../utils/interpret'
 
 export default function Reading() {
   const { t, bi } = useLang()
@@ -88,6 +89,10 @@ export default function Reading() {
                         <span className="kw-label">{t('keywords')}:</span> {bi(m.keywords)}
                       </p>
                       <p className="interp-text">{bi(m.text)}</p>
+                      <div className="interp-deep">
+                        <span className="deep-label">✦ {t('inDepth')}</span>
+                        <p className="interp-text">{bi(deepInterpret(d, pos, topic))}</p>
+                      </div>
                     </motion.div>
                   )}
                 </AnimatePresence>
