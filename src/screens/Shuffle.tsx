@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import Layout from '../components/Layout'
@@ -13,11 +13,21 @@ export default function Shuffle() {
   const { t } = useLang()
   const navigate = useNavigate()
   const [phase, setPhase] = useState<Phase>('idle')
+  const timers = useRef<number[]>([])
+
+  // Clear any pending timers if the user leaves before the auto-advance fires.
+  useEffect(() => () => timers.current.forEach(clearTimeout), [])
 
   const shuffle = () => {
-    if (phase === 'shuffling') return
+    if (phase !== 'idle') return
     setPhase('shuffling')
-    window.setTimeout(() => setPhase('done'), 2400)
+    timers.current.push(
+      window.setTimeout(() => {
+        setPhase('done')
+        // Pause on "ready" briefly, then fan the cards out automatically.
+        timers.current.push(window.setTimeout(() => navigate('/draw'), 2000))
+      }, 2400),
+    )
   }
 
   return (
@@ -61,12 +71,7 @@ export default function Shuffle() {
               {phase === 'shuffling' ? t('shuffling') : t('shuffleNow')}
             </button>
           ) : (
-            <>
-              <p className="ready-text">✦ {t('shuffleDone')} ✦</p>
-              <button className="btn btn-primary" onClick={() => navigate('/draw')}>
-                {t('next')}
-              </button>
-            </>
+            <p className="ready-text">✦ {t('shuffleDone')} ✦</p>
           )}
         </div>
       </motion.div>
