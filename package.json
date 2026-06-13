@@ -1,0 +1,26 @@
+{
+  "name": "tarot-4-you",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Tarot 4 You — a responsive web/mobile Tarot reading app (Rider-Waite-Smith).",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview",
+    "download-cards": "bash scripts/download-cards.sh"
+  },
+  "dependencies": {
+    "framer-motion": "^11.3.19",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.26.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react": "^4.3.1",
+    "typescript": "^5.5.4",
+    "vite": "^5.4.0"
+  }
+}
