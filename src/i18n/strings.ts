@@ -36,8 +36,8 @@ export const UI = {
   // Draw
   drawTitle: { vi: 'Rút bài', en: 'Draw your cards' },
   drawHint: {
-    vi: 'Cả bộ 78 lá đang úp — vuốt ngang để xem, chạm để chọn theo trực giác',
-    en: 'All 78 cards face-down — swipe sideways to browse, tap to choose by intuition',
+    vi: 'Chạm vào các lá để chọn theo trực giác',
+    en: 'Tap the cards to choose by intuition',
   },
   selected: { vi: 'Đã chọn', en: 'Selected' },
   reveal: { vi: 'Lật bài & giải', en: 'Reveal & interpret' },
@@ -64,7 +64,7 @@ export const UI = {
   aiConnect: { vi: 'Kết nối AI', en: 'Connect AI' },
   aiConnecting: { vi: 'Đang kết nối…', en: 'Connecting…' },
   aiRun: { vi: '✨ Giải bằng AI', en: '✨ Interpret with AI' },
-  aiThinking: { vi: 'AI đang luận giải…', en: 'The AI is interpreting…' },
+  aiThinking: { vi: 'Đang luận giải…', en: 'Interpreting…' },
   aiRegenerate: { vi: 'Giải lại', en: 'Regenerate' },
   aiDisconnect: { vi: 'Ngắt kết nối AI', en: 'Disconnect AI' },
   aiError: {
