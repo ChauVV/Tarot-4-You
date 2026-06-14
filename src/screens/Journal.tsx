@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import Layout from '../components/Layout'
 import TarotCardView from '../components/TarotCardView'
+import ConfirmDialog from '../components/ConfirmDialog'
 import { useLang } from '../context/LanguageContext'
 import { useJournal } from '../hooks/useJournal'
 import { getCard } from '../data/cards'
@@ -30,6 +31,7 @@ export default function Journal() {
   const { entries, remove, clear } = useJournal()
   const [openId, setOpenId] = useState<string | null>(null)
   const [deepKeys, setDeepKeys] = useState<Set<string>>(() => new Set())
+  const [confirmClearOpen, setConfirmClearOpen] = useState(false)
 
   const toggleDeep = (key: string) =>
     setDeepKeys((prev) => {
@@ -51,12 +53,7 @@ export default function Journal() {
         <div className="journal-head">
           <h2 className="screen-title">{t('journal')}</h2>
           {entries.length > 0 && (
-            <button
-              className="btn btn-ghost small"
-              onClick={() => {
-                if (window.confirm(t('confirmClear'))) clear()
-              }}
-            >
+            <button className="btn btn-ghost small" onClick={() => setConfirmClearOpen(true)}>
               {t('clearAll')}
             </button>
           )}
@@ -182,6 +179,20 @@ export default function Journal() {
           </ul>
         )}
       </div>
+
+      <ConfirmDialog
+        open={confirmClearOpen}
+        title={t('confirmClear')}
+        message={t('confirmClearMsg')}
+        confirmLabel={t('clearAll')}
+        cancelLabel={t('cancel')}
+        danger
+        onConfirm={() => {
+          clear()
+          setConfirmClearOpen(false)
+        }}
+        onCancel={() => setConfirmClearOpen(false)}
+      />
     </Layout>
   )
 }

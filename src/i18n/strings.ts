@@ -97,6 +97,11 @@ export const UI = {
   delete: { vi: 'Xóa', en: 'Delete' },
   clearAll: { vi: 'Xóa tất cả', en: 'Clear all' },
   confirmClear: { vi: 'Xóa toàn bộ nhật ký?', en: 'Clear the entire journal?' },
+  confirmClearMsg: {
+    vi: 'Toàn bộ lượt xem đã lưu sẽ bị xóa vĩnh viễn. Không thể hoàn tác.',
+    en: 'All saved readings will be permanently deleted. This cannot be undone.',
+  },
+  cancel: { vi: 'Hủy', en: 'Cancel' },
   viewDetails: { vi: 'Xem chi tiết', en: 'View details' },
   hideDetails: { vi: 'Thu gọn', en: 'Hide details' },
 
