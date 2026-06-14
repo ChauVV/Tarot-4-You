@@ -8,6 +8,7 @@ import { buildCotdMessages } from '../utils/aiPrompt'
 import { cardOfDay, todayKey } from '../utils/cardOfDay'
 
 const SEEN_KEY = 't4y.cotd.seen'
+const AI_KEY = 't4y.cotd.ai'
 
 /** Remove leftover markdown so plain prose renders cleanly. */
 function stripMarkdown(s: string): string {
@@ -27,9 +28,21 @@ export default function CardOfDay() {
 
   const [flipped, setFlipped] = useState(() => localStorage.getItem(SEEN_KEY) === today)
 
-  // AI state
+  // AI state — restore today's cached interpretation so we don't re-call the API
+  // on every visit within the same day.
   const { connected, connecting, connect, generate } = useAI()
-  const [aiText, setAiText] = useState('')
+  const [aiText, setAiText] = useState(() => {
+    try {
+      const raw = localStorage.getItem(AI_KEY)
+      if (raw) {
+        const { day, text } = JSON.parse(raw) as { day: string; text: string }
+        if (day === today && typeof text === 'string') return text
+      }
+    } catch {
+      /* ignore */
+    }
+    return ''
+  })
   const [aiLoading, setAiLoading] = useState(false)
   const [aiFailed, setAiFailed] = useState(false)
   const startedRef = useRef(false)
@@ -45,7 +58,13 @@ export default function CardOfDay() {
     setAiText('')
     try {
       const messages = buildCotdMessages(lang, drawn)
-      setAiText(stripMarkdown(await generate(messages)))
+      const out = stripMarkdown(await generate(messages))
+      setAiText(out)
+      try {
+        localStorage.setItem(AI_KEY, JSON.stringify({ day: today, text: out }))
+      } catch {
+        /* ignore */
+      }
     } catch {
       setAiFailed(true)
     } finally {
@@ -53,9 +72,10 @@ export default function CardOfDay() {
     }
   }
 
-  // Auto-run AI when card is flipped and AI is connected
+  // Auto-run AI when the card is flipped and AI is connected — but skip if we
+  // already restored today's cached interpretation.
   useEffect(() => {
-    if (flipped && connected && !startedRef.current) {
+    if (flipped && connected && !startedRef.current && !aiText) {
       startedRef.current = true
       void runAI()
     }

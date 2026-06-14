@@ -23,6 +23,10 @@ interface Props {
   question: string
   spread: Spread
   drawn: DrawnCard[]
+  /** Called with the AI summary text whenever one is generated. */
+  onResult?: (text: string) => void
+  /** Called when the interpretation becomes ready (or stops being ready). */
+  onReadyChange?: (ready: boolean) => void
 }
 
 /**
@@ -30,7 +34,7 @@ interface Props {
  * if the user has connected OpenRouter it interprets with AI automatically
  * (showing a loading state), and falls back to the static text on failure.
  */
-export default function AIReadingPanel({ active, topic, question, spread, drawn }: Props) {
+export default function AIReadingPanel({ active, topic, question, spread, drawn, onResult, onReadyChange }: Props) {
   const { t, bi, lang } = useLang()
   const { connected, connecting, connect, generate } = useAI()
 
@@ -47,7 +51,9 @@ export default function AIReadingPanel({ active, topic, question, spread, drawn 
     setText('')
     try {
       const messages = buildReadingMessages(lang, topic, question, spread, drawn)
-      setText(stripMarkdown(await generate(messages)))
+      const out = stripMarkdown(await generate(messages))
+      setText(out)
+      onResult?.(out)
     } catch {
       setFailed(true)
     } finally {
@@ -73,6 +79,15 @@ export default function AIReadingPanel({ active, topic, question, spread, drawn 
       /* user closed the popup */
     }
   }
+
+  // The interpretation is "ready" once the static text shows (not connected),
+  // the AI text arrives, or the AI failed (we fall back to static). It is NOT
+  // ready while the AI is still generating.
+  const ready = active && (!connected || !!text || failed)
+  useEffect(() => {
+    onReadyChange?.(ready)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [ready])
 
   if (!active) return null
 
@@ -104,7 +119,7 @@ export default function AIReadingPanel({ active, topic, question, spread, drawn 
         <>
           <p className="summary-text">{showAI ? text : fallback}</p>
 
-          {connected && (text || failed) && (
+          {connected && failed && (
             <button className="btn btn-ghost small summary-action" onClick={run}>
               {t('aiRegenerate')}
             </button>

@@ -61,4 +61,6 @@ export interface JournalEntry {
   question: string
   spreadId: string
   cards: { cardId: string; reversed: boolean }[]
+  /** AI-generated summary, saved when the reading was interpreted by AI. */
+  aiSummary?: string
 }

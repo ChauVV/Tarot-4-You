@@ -20,6 +20,8 @@ export default function Reading() {
   const [flipped, setFlipped] = useState<boolean[]>(() => drawn.map(() => false))
   const [deepOpen, setDeepOpen] = useState<boolean[]>(() => drawn.map(() => false))
   const [savedId, setSavedId] = useState<string | null>(null)
+  const [aiSummary, setAiSummary] = useState('')
+  const [interpretReady, setInterpretReady] = useState(false)
 
   useEffect(() => {
     if (!drawn.length || !spread) navigate('/question', { replace: true })
@@ -42,6 +44,7 @@ export default function Reading() {
       question,
       spreadId,
       cards: drawn.map((d) => ({ cardId: d.card.id, reversed: d.reversed })),
+      aiSummary: aiSummary || undefined,
     })
     setSavedId(id)
   }
@@ -128,6 +131,8 @@ export default function Reading() {
           question={question}
           spread={spread}
           drawn={drawn}
+          onResult={setAiSummary}
+          onReadyChange={setInterpretReady}
         />
 
         <div className="screen-actions column">
@@ -137,7 +142,7 @@ export default function Reading() {
             </button>
           )}
           {allFlipped && (
-            <button className="btn btn-secondary" onClick={save} disabled={!!savedId}>
+            <button className="btn btn-secondary" onClick={save} disabled={!!savedId || !interpretReady}>
               {savedId ? t('saved') : t('saveToJournal')}
             </button>
           )}

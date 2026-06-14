@@ -160,7 +160,9 @@ export default function Journal() {
 
                         <div className="reading-summary">
                           <h4 className="summary-title">✦ {t('summary')} ✦</h4>
-                          <p className="summary-text">{bi(summarize(drawn, spread))}</p>
+                          <p className="summary-text">
+                            {e.aiSummary ? e.aiSummary : bi(summarize(drawn, spread))}
+                          </p>
                         </div>
                       </motion.div>
                     )}
