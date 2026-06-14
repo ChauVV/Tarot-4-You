@@ -1438,6 +1438,227 @@ img {
   color: var(--text);
 }
 
+/* ============================================================
+   Credits badge (TopBar) + Credits panel
+   ============================================================ */
+
+.credits-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 32px;
+  padding: 0 10px;
+  border: 1.5px solid var(--border);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--text);
+  cursor: pointer;
+  font-family: var(--font-body);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  backdrop-filter: blur(6px);
+  transition: background 0.2s, border-color 0.2s, transform 0.15s;
+}
+
+.credits-badge:hover {
+  background: var(--accent-soft);
+  border-color: var(--accent);
+  transform: translateY(-1px);
+}
+
+.credits-badge-count {
+  color: var(--accent);
+}
+
+.credits-badge-plus {
+  color: var(--text-dim);
+  font-size: 1rem;
+  line-height: 1;
+}
+
+/* overlay */
+.credits-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(3px);
+}
+
+/* panel */
+.credits-panel {
+  position: fixed;
+  z-index: 91;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: min(92vw, 380px);
+  background: var(--surface-solid);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 28px 24px 22px;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.credits-panel-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  text-align: center;
+}
+
+.credits-panel-icon {
+  font-size: 1.6rem;
+  color: var(--accent);
+}
+
+.credits-panel-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.credits-panel-sub {
+  margin: 4px 0 0;
+  font-size: 0.85rem;
+  color: var(--text-dim);
+  line-height: 1.5;
+}
+
+.credits-panel-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.credits-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 14px 16px;
+  border-radius: var(--radius-sm);
+  border: 1.5px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.2s, border-color 0.2s, transform 0.15s;
+}
+
+.credits-btn:hover {
+  transform: translateY(-1px);
+}
+
+.credits-btn-ad {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.credits-btn-ad:hover {
+  background: var(--accent-soft);
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+.credits-btn-free:hover {
+  background: var(--surface-2);
+  border-color: var(--border-soft);
+}
+
+.credits-btn-icon {
+  font-size: 1.4rem;
+  flex-shrink: 0;
+}
+
+.credits-btn-text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.credits-btn-text strong {
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.credits-btn-text small {
+  font-size: 0.78rem;
+  color: var(--text-dim);
+}
+
+.credits-btn-badge {
+  flex-shrink: 0;
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--accent);
+  min-width: 28px;
+  text-align: right;
+}
+
+.credits-btn-badge--dim {
+  color: var(--text-dim);
+}
+
+.credits-panel-dismiss {
+  align-self: center;
+  background: none;
+  border: none;
+  color: var(--text-dim);
+  font-size: 0.82rem;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: color 0.15s;
+}
+
+.credits-panel-dismiss:hover {
+  color: var(--text);
+}
+
+/* watching-ad state */
+.credits-panel-ad {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 0;
+}
+
+.credits-ad-spinner {
+  width: 48px;
+  height: 48px;
+  border: 3px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.9s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.credits-ad-label {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--text-dim);
+}
+
+.credits-ad-reward {
+  margin: 0;
+  font-size: 0.82rem;
+  color: var(--text-dim);
+}
+
 @media (prefers-reduced-motion: reduce) {
   * {
     animation-duration: 0.001ms !important;

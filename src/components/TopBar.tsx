@@ -41,6 +41,8 @@ export default function TopBar({ showBack }: Props) {
         ) : (
           <span className="topbar-spacer" />
         )}
+        {/* Credits badge hidden while readings are free. Re-enable with the
+            credit gating in Question.tsx when we want to monetize. */}
       </div>
 
       <Link to="/" className="brand">

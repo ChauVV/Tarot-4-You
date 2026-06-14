@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react'
 import TopBar from './TopBar'
+import CreditsPanel from './CreditsPanel'
 
 interface Props {
   children: ReactNode
@@ -15,6 +16,7 @@ export default function Layout({ children, showBack, center }: Props) {
       <div className="starfield starfield-2" aria-hidden />
       <TopBar showBack={showBack} />
       <main className={`content ${center ? 'content-center' : ''}`}>{children}</main>
+      <CreditsPanel />
     </div>
   )
 }

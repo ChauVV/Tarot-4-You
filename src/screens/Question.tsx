@@ -32,6 +32,8 @@ export default function Question() {
       setDir(1)
       setStep(2)
     } else {
+      // Reading is free for now (credit gating disabled until we have users).
+      // To re-enable: check `credits`, openPanel() if 0, else spendCredit().
       navigate('/shuffle')
     }
   }

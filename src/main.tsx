@@ -1,10 +1,12 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
+import { Analytics } from '@vercel/analytics/react'
 import App from './App'
 import { LanguageProvider } from './context/LanguageContext'
 import { ThemeProvider } from './context/ThemeContext'
 import { AIProvider } from './context/AIContext'
+import { CreditsProvider } from './context/CreditsContext'
 import { maybeHandleOAuthPopup } from './utils/openrouter'
 import './styles/index.css'
 
@@ -16,9 +18,12 @@ if (!maybeHandleOAuthPopup()) {
       <ThemeProvider>
         <LanguageProvider>
           <AIProvider>
-            <BrowserRouter>
-              <App />
-            </BrowserRouter>
+            <CreditsProvider>
+              <BrowserRouter>
+                <App />
+              </BrowserRouter>
+              <Analytics />
+            </CreditsProvider>
           </AIProvider>
         </LanguageProvider>
       </ThemeProvider>
