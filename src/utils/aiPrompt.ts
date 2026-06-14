@@ -44,8 +44,8 @@ export function buildReadingMessages(
 ): ChatMessage[] {
   const system =
     lang === 'vi'
-      ? `Bạn là một người đọc bài Tarot ấm áp, sâu sắc và thực tế. Trả lời hoàn toàn bằng tiếng Việt, văn xuôi thuần — KHÔNG markdown, KHÔNG dấu ** in đậm, KHÔNG gạch đầu dòng. Bám sát câu hỏi và vị trí từng lá. Mỗi phần viết 2–3 câu, ấm áp nhưng đi thẳng trọng tâm. Nhấn mạnh Tarot là công cụ phản chiếu, không phải lời phán quyết. RẤT QUAN TRỌNG: trả về CHÍNH XÁC theo các thẻ [[...]] được yêu cầu, không thêm bất kỳ chữ nào ngoài các thẻ đó.`
-      : `You are a warm, insightful, practical Tarot reader. Respond entirely in English, plain prose — NO markdown, NO ** bold, NO bullet points. Stay close to the question and each card's position. Write 2–3 sentences per part, warm but to the point. Emphasize that Tarot is a tool for reflection, not a verdict. VERY IMPORTANT: return EXACTLY the requested [[...]] tags and nothing outside them.`
+      ? `Bạn là một người đọc bài Tarot ấm áp, sâu sắc, giàu trải nghiệm và rất thực tế. Trả lời hoàn toàn bằng tiếng Việt, văn xuôi thuần — KHÔNG markdown, KHÔNG dấu ** in đậm, KHÔNG gạch đầu dòng. Bám sát câu hỏi và vị trí từng lá. Mỗi phần viết một đoạn ĐẦY ĐỦ và CHI TIẾT, khoảng 4–6 câu, có chiều sâu cảm xúc, liên hệ với hoàn cảnh người hỏi và đưa ra góc nhìn cụ thể (tránh chung chung, tránh sáo rỗng). Nhấn mạnh Tarot là công cụ phản chiếu, không phải lời phán quyết. RẤT QUAN TRỌNG: trả về CHÍNH XÁC theo các thẻ [[...]] được yêu cầu, không thêm bất kỳ chữ nào ngoài các thẻ đó.`
+      : `You are a warm, insightful, experienced, and very practical Tarot reader. Respond entirely in English, plain prose — NO markdown, NO ** bold, NO bullet points. Stay close to the question and each card's position. Write a FULL, DETAILED paragraph of about 4–6 sentences per part, with emotional depth, tied to the querent's situation and offering concrete perspective (avoid vague platitudes). Emphasize that Tarot is a tool for reflection, not a verdict. VERY IMPORTANT: return EXACTLY the requested [[...]] tags and nothing outside them.`
 
   const cards = cardLines(lang, spread, drawn)
 
@@ -59,8 +59,8 @@ export function buildReadingMessages(
 
   const user =
     lang === 'vi'
-      ? `Chủ đề: ${topicLabel(topic, 'vi')}${f ? ` — ${f}` : ''}\n${q ? `Câu hỏi: "${q}"` : 'Không có câu hỏi cụ thể (xem tổng quan).'}\nKiểu trải bài: ${spread.name.vi}\n\nCác lá đã rút:\n${cards}\n\nHãy điền vào ĐÚNG các thẻ sau (giữ nguyên thẻ trên dòng riêng, viết nội dung ngay dưới mỗi thẻ):\nVới mỗi lá: [[Cx.O]] = ý nghĩa lá đó tại vị trí của nó; [[Cx.M]] = thông điệp/lời khuyên lá đó dành cho người hỏi.\n[[S.MYSTIC]] = thông điệp tổng hợp, kết nối các lá thành một câu chuyện.\n[[S.ADVICE]] = lời khuyên tổng hợp, thực tế, hành động được.\n\n${template}\n[[S.MYSTIC]]\n[[S.ADVICE]]`
-      : `Topic: ${topicLabel(topic, 'en')}${f ? ` — ${f}` : ''}\n${q ? `Question: "${q}"` : 'No specific question (general reading).'}\nSpread: ${spread.name.en}\n\nCards drawn:\n${cards}\n\nFill in EXACTLY these tags (keep each tag on its own line, write the content right under each tag):\nFor each card: [[Cx.O]] = the card's meaning in its position; [[Cx.M]] = that card's message/advice for the querent.\n[[S.MYSTIC]] = a synthesized message weaving the cards into one story.\n[[S.ADVICE]] = combined, practical, actionable advice.\n\n${template}\n[[S.MYSTIC]]\n[[S.ADVICE]]`
+      ? `Chủ đề: ${topicLabel(topic, 'vi')}${f ? ` — ${f}` : ''}\n${q ? `Câu hỏi: "${q}"` : 'Không có câu hỏi cụ thể (xem tổng quan).'}\nKiểu trải bài: ${spread.name.vi}\n\nCác lá đã rút:\n${cards}\n\nHãy điền vào ĐÚNG các thẻ sau (giữ nguyên thẻ trên dòng riêng, viết nội dung ngay dưới mỗi thẻ). Mỗi phần là một đoạn đầy đủ 4–6 câu, sâu sắc và cụ thể:\nVới mỗi lá: [[Cx.O]] = phân tích ý nghĩa lá đó tại vị trí của nó, liên hệ chiều xuôi/ngược và bối cảnh câu hỏi; [[Cx.M]] = thông điệp và lời khuyên thực tế lá đó dành riêng cho người hỏi.\n[[S.MYSTIC]] = thông điệp tổng hợp, kết nối tất cả các lá thành một câu chuyện mạch lạc, giàu hình ảnh.\n[[S.ADVICE]] = lời khuyên tổng hợp, thực tế, cụ thể, hành động được.\n\n${template}\n[[S.MYSTIC]]\n[[S.ADVICE]]`
+      : `Topic: ${topicLabel(topic, 'en')}${f ? ` — ${f}` : ''}\n${q ? `Question: "${q}"` : 'No specific question (general reading).'}\nSpread: ${spread.name.en}\n\nCards drawn:\n${cards}\n\nFill in EXACTLY these tags (keep each tag on its own line, write the content right under each tag). Each part is a full 4–6 sentence paragraph, insightful and specific:\nFor each card: [[Cx.O]] = analyze the card's meaning in its position, factoring orientation and the question's context; [[Cx.M]] = a practical message and advice that card holds for the querent.\n[[S.MYSTIC]] = a synthesized message weaving ALL the cards into one coherent, vivid story.\n[[S.ADVICE]] = combined, practical, concrete, actionable advice.\n\n${template}\n[[S.MYSTIC]]\n[[S.ADVICE]]`
 
   return [
     { role: 'system', content: system },
@@ -105,8 +105,8 @@ export function buildFollowupMessages(
 ): ChatMessage[] {
   const system =
     lang === 'vi'
-      ? `Bạn là một người đọc bài Tarot ấm áp, sâu sắc và thực tế. Trả lời hoàn toàn bằng tiếng Việt, văn xuôi thuần — KHÔNG markdown, KHÔNG dấu ** in đậm, KHÔNG gạch đầu dòng. Dựa trên các lá bài ĐÃ rút, trả lời thẳng vào câu hỏi tiếp theo trong 1–2 đoạn ngắn. Nhấn mạnh Tarot là công cụ phản chiếu, không phải lời phán quyết.`
-      : `You are a warm, insightful, practical Tarot reader. Respond entirely in English, plain prose — NO markdown, NO ** bold, NO bullet points. Based on the cards ALREADY drawn, answer the follow-up question directly in 1–2 short paragraphs. Emphasize that Tarot is a tool for reflection, not a verdict.`
+      ? `Bạn là một người đọc bài Tarot ấm áp, sâu sắc và thực tế. Trả lời hoàn toàn bằng tiếng Việt, văn xuôi thuần — KHÔNG markdown, KHÔNG dấu ** in đậm, KHÔNG gạch đầu dòng. Dựa trên các lá bài ĐÃ rút, trả lời thẳng vào câu hỏi tiếp theo một cách chi tiết, sâu sắc trong 2–3 đoạn đầy đủ, có liên hệ cụ thể tới các lá đã rút. Nhấn mạnh Tarot là công cụ phản chiếu, không phải lời phán quyết.`
+      : `You are a warm, insightful, practical Tarot reader. Respond entirely in English, plain prose — NO markdown, NO ** bold, NO bullet points. Based on the cards ALREADY drawn, answer the follow-up question directly and in depth across 2–3 full paragraphs, tied concretely to the cards drawn. Emphasize that Tarot is a tool for reflection, not a verdict.`
 
   const cards = cardLines(lang, spread, drawn)
   const q = question.trim()

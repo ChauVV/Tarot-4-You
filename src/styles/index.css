@@ -1767,6 +1767,40 @@ img {
   color: var(--text);
 }
 
+/* Manual API-key entry (fallback for the OAuth flow) */
+.manual-key {
+  margin-top: 18px;
+  width: min(360px, 100%);
+  margin-inline: auto;
+}
+
+.manual-key-toggle {
+  font-size: 0.85rem;
+}
+
+.manual-key-body {
+  margin-top: 10px;
+  text-align: left;
+}
+
+.manual-key-body .field-hint {
+  margin: 0 0 10px;
+}
+
+.manual-key-row {
+  display: flex;
+  gap: 8px;
+}
+
+.manual-key-row .question-input {
+  flex: 1;
+  font-size: 0.9rem;
+}
+
+.manual-key-row .btn {
+  white-space: nowrap;
+}
+
 /* ============================================================
    Confirmation dialog (app-styled window.confirm replacement)
    ============================================================ */

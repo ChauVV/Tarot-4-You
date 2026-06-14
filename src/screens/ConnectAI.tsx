@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import Layout from '../components/Layout'
@@ -6,9 +6,11 @@ import { useAI } from '../context/AIContext'
 import { useLang } from '../context/LanguageContext'
 
 export default function ConnectAI() {
-  const { connected, connecting, connectError, connect, disconnect, skip } = useAI()
+  const { connected, connecting, connectError, connect, connectWithKey, disconnect, skip } = useAI()
   const { t } = useLang()
   const navigate = useNavigate()
+  const [showManual, setShowManual] = useState(false)
+  const [manualKey, setManualKey] = useState('')
 
   useEffect(() => {
     if (connected && !connectError) navigate('/', { replace: true })
@@ -17,6 +19,14 @@ export default function ConnectAI() {
   const handleConnect = async () => {
     try {
       await connect()
+    } catch {
+      // error is stored in connectError
+    }
+  }
+
+  const handleManual = () => {
+    try {
+      connectWithKey(manualKey)
     } catch {
       // error is stored in connectError
     }
@@ -53,7 +63,11 @@ export default function ConnectAI() {
             <p className="connect-ai-desc">{t('connectAIDesc')}</p>
 
             {connectError && (
-              <p className="connect-ai-error">{t('connectAIErrorTitle')}: {connectError}</p>
+              <p className="connect-ai-error">
+                {connectError === 'invalid-key'
+                  ? t('connectAIManualInvalid')
+                  : `${t('connectAIErrorTitle')}: ${connectError}`}
+              </p>
             )}
 
             <div className="connect-ai-actions">
@@ -73,6 +87,35 @@ export default function ConnectAI() {
               >
                 {t('connectAISkip')}
               </button>
+            </div>
+
+            <div className="manual-key">
+              <button className="btn-link manual-key-toggle" onClick={() => setShowManual((v) => !v)}>
+                {t('connectAIManualToggle')} {showManual ? '▴' : '▾'}
+              </button>
+              {showManual && (
+                <div className="manual-key-body">
+                  <p className="field-hint">{t('connectAIManualHint')}</p>
+                  <div className="manual-key-row">
+                    <input
+                      className="question-input"
+                      type="text"
+                      placeholder="sk-or-v1-..."
+                      value={manualKey}
+                      onChange={(e) => setManualKey(e.target.value)}
+                      autoComplete="off"
+                      spellCheck={false}
+                    />
+                    <button
+                      className="btn btn-secondary"
+                      onClick={handleManual}
+                      disabled={!manualKey.trim()}
+                    >
+                      {t('connectAIManualSave')}
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
           </>
         )}

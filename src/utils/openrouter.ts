@@ -119,7 +119,12 @@ async function getFreeModels(key: string): Promise<string[]> {
   return ids
 }
 
-async function callChat(key: string, messages: ChatMessage[], model: string): Promise<string> {
+async function callChat(
+  key: string,
+  messages: ChatMessage[],
+  model: string,
+  maxTokens: number,
+): Promise<string> {
   const res = await fetch(CHAT_URL, {
     method: 'POST',
     headers: {
@@ -128,7 +133,7 @@ async function callChat(key: string, messages: ChatMessage[], model: string): Pr
       'HTTP-Referer': window.location.origin,
       'X-Title': 'Tarot 4 You',
     },
-    body: JSON.stringify({ model, messages, max_tokens: 600 }),
+    body: JSON.stringify({ model, messages, max_tokens: maxTokens }),
   })
   if (!res.ok) {
     const detail = await res.text().catch(() => '')
@@ -153,13 +158,13 @@ async function callChat(key: string, messages: ChatMessage[], model: string): Pr
  * Call chat completions, trying free models in turn so a single removed model
  * never breaks the feature. Reliability over a specific model choice.
  */
-export async function chat(key: string, messages: ChatMessage[]): Promise<string> {
+export async function chat(key: string, messages: ChatMessage[], maxTokens = 800): Promise<string> {
   const models = await getFreeModels(key)
   let lastErr: unknown
   // Try more models since free ones are frequently rate-limited.
   for (const model of models.slice(0, 8)) {
     try {
-      const text = await callChat(key, messages, model)
+      const text = await callChat(key, messages, model, maxTokens)
       if (text) return text
     } catch (err) {
       lastErr = err

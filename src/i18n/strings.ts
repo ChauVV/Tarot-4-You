@@ -69,8 +69,8 @@ export const UI = {
   newReading: { vi: 'Xem quẻ mới', en: 'New reading' },
   tapToFlip: { vi: 'Chạm để lật', en: 'Tap to flip' },
   summary: { vi: 'Tổng kết', en: 'Summary' },
-  mysticMessage: { vi: 'Thông điệp thần bí', en: 'Mystic Message' },
-  combinedAdvice: { vi: 'Lời khuyên tổng hợp', en: 'Combined Advice' },
+  mysticMessage: { vi: 'Bức tranh tổng thể', en: 'The Bigger Picture' },
+  combinedAdvice: { vi: 'Hướng đi cho bạn', en: 'Your Path Forward' },
   interpreting: { vi: 'Đang luận giải…', en: 'Interpreting…' },
   aiLimitTitle: { vi: 'Đã hết lượt AI miễn phí hôm nay', en: 'Daily free AI limit reached' },
   aiLimitNote: {
@@ -103,6 +103,16 @@ export const UI = {
   connectAIContinue: { vi: 'Tiếp tục', en: 'Continue' },
   connectAIErrorTitle: { vi: 'Kết nối thất bại', en: 'Connection failed' },
   connectAIRetry: { vi: 'Thử lại', en: 'Try again' },
+  connectAIManualToggle: { vi: 'Hoặc dán API key OpenRouter', en: 'Or paste your OpenRouter API key' },
+  connectAIManualHint: {
+    vi: 'Mở openrouter.ai → Keys → tạo key, copy chuỗi bắt đầu bằng “sk-or-” rồi dán vào đây.',
+    en: 'Open openrouter.ai → Keys → create a key, copy the string starting with “sk-or-” and paste it here.',
+  },
+  connectAIManualSave: { vi: 'Kết nối', en: 'Connect' },
+  connectAIManualInvalid: {
+    vi: 'API key không hợp lệ — phải bắt đầu bằng “sk-or-”.',
+    en: 'Invalid API key — it must start with “sk-or-”.',
+  },
 
   // AI reader (optional, via OpenRouter)
   aiTitle: { vi: 'Giải bằng AI', en: 'AI reading' },

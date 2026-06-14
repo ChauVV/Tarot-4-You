@@ -55,7 +55,10 @@ export function useAiReading({ active, topic, question, spread, drawn, focus }: 
     setResult(null)
     try {
       const messages = buildReadingMessages(lang, topic, question, spread, drawn, focus)
-      const raw = await generate(messages)
+      // Scale the token budget with the spread size so longer, richer per-card
+      // text isn't truncated (each card needs room for 2 full paragraphs).
+      const maxTokens = Math.min(4000, 1200 + drawn.length * 700)
+      const raw = await generate(messages, maxTokens)
       const parsed = parseStructuredReading(raw, drawn.length)
       if (!parsed) throw new Error('unparseable')
       // Clean each section.
@@ -79,7 +82,7 @@ export function useAiReading({ active, topic, question, spread, drawn, focus }: 
     setRateLimited(false)
     try {
       const messages = buildFollowupMessages(lang, topic, question, spread, drawn, text, focus)
-      const answer = strip(await generate(messages))
+      const answer = strip(await generate(messages, 1200))
       setFollowups((prev) => [...prev, { question: text, answer }])
     } catch (err) {
       // On a daily-limit error, surface the notice but DON'T record a failed

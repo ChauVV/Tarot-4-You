@@ -19,11 +19,13 @@ interface AIContextValue {
   /** True once the user chose to use the app without AI. */
   skipped: boolean
   connect: () => Promise<void>
+  /** Connect by pasting an OpenRouter API key directly (bypasses OAuth). */
+  connectWithKey: (key: string) => void
   disconnect: () => void
   /** Mark AI as skipped so the app is usable without connecting. */
   skip: () => void
   /** Run a chat completion with the connected account. Throws if not connected. */
-  generate: (messages: ChatMessage[]) => Promise<string>
+  generate: (messages: ChatMessage[], maxTokens?: number) => Promise<string>
 }
 
 const AIContext = createContext<AIContextValue | null>(null)
@@ -131,22 +133,33 @@ export function AIProvider({ children }: { children: ReactNode }) {
     setKeyState(null)
   }, [])
 
+  const connectWithKey = useCallback((raw: string) => {
+    const k = raw.trim()
+    if (!/^sk-or-/.test(k)) {
+      setConnectError('invalid-key')
+      throw new Error('invalid-key')
+    }
+    setConnectError(null)
+    setKey(k)
+    setKeyState(k)
+  }, [])
+
   const skip = useCallback(() => {
     localStorage.setItem(SKIP_STORAGE, '1')
     setSkipped(true)
   }, [])
 
   const generate = useCallback(
-    async (messages: ChatMessage[]) => {
+    async (messages: ChatMessage[], maxTokens?: number) => {
       if (!key) throw new Error('Not connected')
-      return chat(key, messages)
+      return chat(key, messages, maxTokens)
     },
     [key],
   )
 
   const value = useMemo<AIContextValue>(
-    () => ({ connected: !!key, connecting, connectError, skipped, connect, disconnect, skip, generate }),
-    [key, connecting, connectError, skipped, connect, disconnect, skip, generate],
+    () => ({ connected: !!key, connecting, connectError, skipped, connect, connectWithKey, disconnect, skip, generate }),
+    [key, connecting, connectError, skipped, connect, connectWithKey, disconnect, skip, generate],
   )
 
   return <AIContext.Provider value={value}>{children}</AIContext.Provider>
