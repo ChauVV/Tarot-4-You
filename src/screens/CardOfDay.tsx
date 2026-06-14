@@ -120,14 +120,7 @@ export default function CardOfDay() {
             )}
 
             {/* AI result — hides default when successful */}
-            {showAI && (
-              <>
-                <p className="interp-text">{aiText}</p>
-                <button className="btn btn-ghost small summary-action" onClick={runAI}>
-                  {t('aiRegenerate')}
-                </button>
-              </>
-            )}
+            {showAI && <p className="interp-text">{aiText}</p>}
 
             {/* Default result — shown when AI not connected, failed, or hasn't returned */}
             {showDefault && !aiLoading && (
@@ -137,6 +130,13 @@ export default function CardOfDay() {
                 </p>
                 <p className="interp-text">{bi(m.text)}</p>
               </>
+            )}
+
+            {/* Retry button — only when the AI call failed */}
+            {connected && aiFailed && (
+              <button className="btn btn-ghost small summary-action" onClick={runAI}>
+                {t('aiRegenerate')}
+              </button>
             )}
 
             {/* Connect AI button when not connected */}
