@@ -69,7 +69,6 @@ export default function Reading() {
 
   if (!drawn.length || !spread) return null
 
-  const flip = (i: number) => setFlipped((p) => p.map((v, idx) => (idx === i ? true : v)))
   const flipAll = () => setFlipped(drawn.map(() => true))
 
   const newReading = () => {
@@ -137,7 +136,7 @@ export default function Reading() {
                 <TarotCardView
                   drawn={d}
                   faceUp={flipped[i]}
-                  onClick={flipped[i] ? undefined : () => flip(i)}
+                  onClick={flipped[i] ? undefined : flipAll}
                   showLabel
                 />
 
@@ -149,36 +148,48 @@ export default function Reading() {
                       animate={{ opacity: 1, height: 'auto' }}
                       transition={{ duration: 0.4 }}
                     >
-                      <p className="interp-keywords">
-                        <span className="kw-label">{t('keywords')}:</span> {bi(m.keywords)}
-                      </p>
-
-                      {usingAI && card && (card.overview || card.message) ? (
-                        <>
-                          {card.overview && (
-                            <div className="ai-section">
-                              <span className="ai-section-label">✦ {t('overview')}</span>
-                              <p className="interp-text">{card.overview}</p>
-                            </div>
-                          )}
-                          {card.message && (
-                            <div className="ai-section">
-                              <span className="ai-section-label">✦ {t('messageForYou')}</span>
-                              <p className="interp-text">{card.message}</p>
-                            </div>
-                          )}
-                        </>
-                      ) : usingAI && ai.loading ? (
-                        <p className="ai-thinking">
-                          <span className="ai-dots" aria-hidden>
-                            <span />
-                            <span />
-                            <span />
-                          </span>
-                          {t('interpreting')}
-                        </p>
+                      {usingAI ? (
+                        card && (card.overview || card.message) ? (
+                          <>
+                            {card.overview && (
+                              <div className="ai-section">
+                                <span className="ai-section-label">✦ {t('overview')}</span>
+                                <p className="interp-text">{card.overview}</p>
+                              </div>
+                            )}
+                            {card.message && (
+                              <div className="ai-section">
+                                <span className="ai-section-label">✦ {t('messageForYou')}</span>
+                                <p className="interp-text">{card.message}</p>
+                              </div>
+                            )}
+                          </>
+                        ) : ai.failed ? (
+                          // AI errored — fall back to the static meaning.
+                          <>
+                            <p className="interp-keywords">
+                              <span className="kw-label">{t('keywords')}:</span> {bi(m.keywords)}
+                            </p>
+                            <p className="interp-text">{bi(m.text)}</p>
+                          </>
+                        ) : (
+                          <p className="ai-thinking">
+                            <span className="ai-dots" aria-hidden>
+                              <span />
+                              <span />
+                              <span />
+                            </span>
+                            {t('interpreting')}
+                          </p>
+                        )
                       ) : (
-                        <p className="interp-text">{bi(m.text)}</p>
+                        // No AI connected — static meaning only.
+                        <>
+                          <p className="interp-keywords">
+                            <span className="kw-label">{t('keywords')}:</span> {bi(m.keywords)}
+                          </p>
+                          <p className="interp-text">{bi(m.text)}</p>
+                        </>
                       )}
                     </motion.div>
                   )}
