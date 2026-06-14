@@ -32,7 +32,7 @@ interface Props {
  */
 export default function AIReadingPanel({ active, topic, question, spread, drawn }: Props) {
   const { t, bi, lang } = useLang()
-  const { connected, connecting, connect, disconnect, generate } = useAI()
+  const { connected, connecting, connect, generate } = useAI()
 
   const [text, setText] = useState('')
   const [loading, setLoading] = useState(false)
@@ -89,11 +89,6 @@ export default function AIReadingPanel({ active, topic, question, spread, drawn 
         <h3 className="summary-title">
           ✦ {t('summary')} ✦{showAI && <span className="ai-badge">✨ AI</span>}
         </h3>
-        {connected && (
-          <button className="ai-disconnect" onClick={disconnect}>
-            {t('aiDisconnect')}
-          </button>
-        )}
       </div>
 
       {connected && loading ? (

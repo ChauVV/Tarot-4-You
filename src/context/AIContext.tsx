@@ -13,6 +13,7 @@ import {
 interface AIContextValue {
   connected: boolean
   connecting: boolean
+  connectError: string | null
   connect: () => Promise<void>
   disconnect: () => void
   /** Run a chat completion with the connected account. Throws if not connected. */
@@ -24,6 +25,7 @@ const AIContext = createContext<AIContextValue | null>(null)
 export function AIProvider({ children }: { children: ReactNode }) {
   const [key, setKeyState] = useState<string | null>(() => getKey())
   const [connecting, setConnecting] = useState(false)
+  const [connectError, setConnectError] = useState<string | null>(null)
 
   // Fallback: if the OAuth popup was blocked and we got redirected in-page,
   // finish the exchange here and clean the URL.
@@ -49,6 +51,7 @@ export function AIProvider({ children }: { children: ReactNode }) {
 
   const connect = useCallback(async () => {
     setConnecting(true)
+    setConnectError(null)
     try {
       const url = await buildAuthUrl()
       const popup = window.open(url, POPUP_NAME, 'width=520,height=720')
@@ -75,6 +78,10 @@ export function AIProvider({ children }: { children: ReactNode }) {
       const k = await exchangeCode(code)
       setKey(k)
       setKeyState(k)
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : 'unknown'
+      if (msg !== 'cancelled') setConnectError(msg)
+      throw err
     } finally {
       setConnecting(false)
     }
@@ -94,8 +101,8 @@ export function AIProvider({ children }: { children: ReactNode }) {
   )
 
   const value = useMemo<AIContextValue>(
-    () => ({ connected: !!key, connecting, connect, disconnect, generate }),
-    [key, connecting, connect, disconnect, generate],
+    () => ({ connected: !!key, connecting, connectError, connect, disconnect, generate }),
+    [key, connecting, connectError, connect, disconnect, generate],
   )
 
   return <AIContext.Provider value={value}>{children}</AIContext.Provider>

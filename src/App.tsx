@@ -1,6 +1,8 @@
 import { Routes, Route, Navigate } from 'react-router-dom'
 import { ReadingProvider } from './context/ReadingContext'
+import { useAI } from './context/AIContext'
 import Home from './screens/Home'
+import ConnectAI from './screens/ConnectAI'
 import Question from './screens/Question'
 import Shuffle from './screens/Shuffle'
 import Draw from './screens/Draw'
@@ -9,10 +11,13 @@ import Journal from './screens/Journal'
 import CardOfDay from './screens/CardOfDay'
 
 export default function App() {
+  const { connected } = useAI()
+
   return (
     <ReadingProvider>
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={connected ? <Home /> : <Navigate to="/connect-ai" replace />} />
+        <Route path="/connect-ai" element={<ConnectAI />} />
         <Route path="/question" element={<Question />} />
         <Route path="/shuffle" element={<Shuffle />} />
         <Route path="/draw" element={<Draw />} />

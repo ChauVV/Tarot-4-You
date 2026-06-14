@@ -55,6 +55,22 @@ export const UI = {
   tapToFlip: { vi: 'Chạm để lật', en: 'Tap to flip' },
   summary: { vi: 'Tổng kết', en: 'Summary' },
 
+  // Connect AI screen
+  connectAITitle: { vi: 'Kết nối AI', en: 'Connect AI' },
+  connectAIDesc: {
+    vi: 'Tarot 4 You dùng OpenRouter để giải bài bằng AI hoàn toàn miễn phí. Kết nối tài khoản OpenRouter của bạn để bắt đầu.',
+    en: 'Tarot 4 You uses OpenRouter to deliver free AI readings. Connect your OpenRouter account to get started.',
+  },
+  connectAISkip: { vi: 'Bỏ qua, dùng giải thích tĩnh', en: 'Skip, use static interpretations' },
+  connectAIConnected: { vi: 'Đã kết nối OpenRouter ✓', en: 'OpenRouter connected ✓' },
+  connectAIConnectedDesc: {
+    vi: 'Bạn đã kết nối thành công. Sẵn sàng trải nghiệm giải bài bằng AI!',
+    en: 'You are connected. Ready to enjoy AI-powered readings!',
+  },
+  connectAIContinue: { vi: 'Tiếp tục', en: 'Continue' },
+  connectAIErrorTitle: { vi: 'Kết nối thất bại', en: 'Connection failed' },
+  connectAIRetry: { vi: 'Thử lại', en: 'Try again' },
+
   // AI reader (optional, via OpenRouter)
   aiTitle: { vi: 'Giải bằng AI', en: 'AI reading' },
   aiIntro: {

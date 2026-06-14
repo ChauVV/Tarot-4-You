@@ -20,7 +20,7 @@ A responsive web/mobile Tarot reading app built with React + TypeScript + Vite.
 
 ```bash
 npm install
-npm run dev        # http://localhost:5173
+npm run dev        # http://localhost:3000
 npm run build      # type-check + bundle vào dist/
 npm run preview    # xem thử bản build
 ```

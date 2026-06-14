@@ -1,6 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom'
 import { useLang } from '../context/LanguageContext'
 import { useTheme } from '../context/ThemeContext'
+import { useAI } from '../context/AIContext'
 
 interface Props {
   /** Show a back button instead of doing nothing. */
@@ -10,7 +11,17 @@ interface Props {
 export default function TopBar({ showBack }: Props) {
   const { lang, toggleLang } = useLang()
   const { theme, toggleTheme } = useTheme()
+  const { connected, connecting, disconnect } = useAI()
   const navigate = useNavigate()
+
+  const handleAI = () => {
+    if (connected) disconnect()
+    else navigate('/connect-ai')
+  }
+
+  const aiTooltip = connected
+    ? lang === 'vi' ? 'Ngắt kết nối AI' : 'Disconnect AI'
+    : lang === 'vi' ? 'Kết nối AI' : 'Connect AI'
 
   return (
     <header className="topbar">
@@ -38,6 +49,16 @@ export default function TopBar({ showBack }: Props) {
       </Link>
 
       <div className="topbar-right">
+        <button
+          className={`icon-btn ai-icon-btn ${connected ? 'ai-icon-btn--on' : ''}`}
+          onClick={handleAI}
+          disabled={connecting}
+          aria-label={aiTooltip}
+          data-tooltip={aiTooltip}
+        >
+          <span className="ai-icon-spark">✦</span>
+          <span className={`ai-icon-dot ${connected ? 'ai-icon-dot--on' : ''}`} />
+        </button>
         <button className="pill-btn" onClick={toggleLang} aria-label="Toggle language">
           {lang === 'vi' ? 'VI' : 'EN'}
         </button>
