@@ -40,9 +40,13 @@ export default function Reading() {
     if (!drawn.length || !spread) navigate('/question', { replace: true })
   }, [drawn.length, spread, navigate])
 
-  // Auto-save to journal once the AI reading is ready.
+  // Save the reading as soon as the cards are revealed — for EVERY outcome
+  // (no AI, AI success, AI failure, rate limit). This guarantees the per-card
+  // interpretations are always persisted; the AI text (if any) is layered on
+  // afterwards by the effect below. The Journal renders the static per-card
+  // meaning whenever `aiCards` is absent, so a base entry is enough.
   useEffect(() => {
-    if (!ai.result || savedRef.current || !spread) return
+    if (!allFlipped || savedRef.current || !spread) return
     savedRef.current = true
     const id = makeId()
     add({
@@ -52,14 +56,23 @@ export default function Reading() {
       question,
       spreadId,
       cards: drawn.map((d) => ({ cardId: d.card.id, reversed: d.reversed })),
-      aiCards: ai.result.cards,
-      aiMystic: ai.result.mystic,
-      aiAdvice: ai.result.advice,
       followups: [],
     })
     setSavedId(id)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [ai.result])
+  }, [allFlipped])
+
+  // Enrich the saved entry with the AI per-card interpretations + summary once
+  // (or whenever) the reading is ready — including after a manual regenerate.
+  useEffect(() => {
+    if (!ai.result || !savedId) return
+    update(savedId, {
+      aiCards: ai.result.cards,
+      aiMystic: ai.result.mystic,
+      aiAdvice: ai.result.advice,
+    })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [ai.result, savedId])
 
   // Keep the saved entry's follow-ups in sync.
   useEffect(() => {
@@ -74,22 +87,6 @@ export default function Reading() {
   const newReading = () => {
     reset()
     navigate('/question')
-  }
-
-  // Manual save only matters for the static (no-AI / failed) path.
-  const saveStatic = () => {
-    if (savedId) return
-    savedRef.current = true
-    const id = makeId()
-    add({
-      id,
-      date: new Date().toISOString(),
-      topic,
-      question,
-      spreadId,
-      cards: drawn.map((d) => ({ cardId: d.card.id, reversed: d.reversed })),
-    })
-    setSavedId(id)
   }
 
   const askFollowup = () => {
@@ -107,9 +104,8 @@ export default function Reading() {
     .slice(0, 5)
 
   const usingAI = connected
-  // Connected users get auto-save on success; a failed AI call (esp. daily
-  // limit) is never saved. Manual save is only for the no-AI static path.
-  const showManualSave = allFlipped && !connected
+  // Every revealed reading is auto-saved (with its per-card interpretations),
+  // so there is no separate manual-save path anymore.
 
   return (
     <Layout showBack>
@@ -321,12 +317,7 @@ export default function Reading() {
               ✦ {t('reveal')}
             </button>
           )}
-          {savedId && usingAI && <p className="auto-saved-note">{t('autoSaved')}</p>}
-          {showManualSave && (
-            <button className="btn btn-secondary" onClick={saveStatic} disabled={!!savedId}>
-              {savedId ? t('saved') : t('saveToJournal')}
-            </button>
-          )}
+          {savedId && <p className="auto-saved-note">{t('autoSaved')}</p>}
           <button className="btn btn-primary" onClick={newReading}>
             {t('newReading')}
           </button>
