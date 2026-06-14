@@ -10,12 +10,18 @@ import {
   type ChatMessage,
 } from '../utils/openrouter'
 
+const SKIP_STORAGE = 't4y.ai.skipped'
+
 interface AIContextValue {
   connected: boolean
   connecting: boolean
   connectError: string | null
+  /** True once the user chose to use the app without AI. */
+  skipped: boolean
   connect: () => Promise<void>
   disconnect: () => void
+  /** Mark AI as skipped so the app is usable without connecting. */
+  skip: () => void
   /** Run a chat completion with the connected account. Throws if not connected. */
   generate: (messages: ChatMessage[]) => Promise<string>
 }
@@ -26,27 +32,43 @@ export function AIProvider({ children }: { children: ReactNode }) {
   const [key, setKeyState] = useState<string | null>(() => getKey())
   const [connecting, setConnecting] = useState(false)
   const [connectError, setConnectError] = useState<string | null>(null)
+  const [skipped, setSkipped] = useState<boolean>(() => localStorage.getItem(SKIP_STORAGE) === '1')
+  // Capture the OAuth `?code=` synchronously during the first render, before any
+  // child <Navigate> can rewrite the URL and drop the query string.
+  const [pendingCode] = useState<string | null>(
+    () => new URLSearchParams(window.location.search).get('code'),
+  )
 
-  // Fallback: if the OAuth popup was blocked and we got redirected in-page,
-  // finish the exchange here and clean the URL.
+  // On return from the auth page with a `?code=`, finish the exchange in-page
+  // and clean the URL. This handles both the popup-blocked desktop case and
+  // the mobile full-page redirect. (A real popup is already short-circuited by
+  // maybeHandleOAuthPopup before the app renders, so if we got here with a code
+  // it's always meant to be exchanged in this tab.)
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search)
-    const code = params.get('code')
-    if (code && !window.opener) {
-      setConnecting(true)
-      exchangeCode(code)
-        .then((k) => {
-          setKey(k)
-          setKeyState(k)
-        })
-        .catch(() => {})
-        .finally(() => {
-          setConnecting(false)
-          params.delete('code')
-          const url = window.location.pathname + (params.toString() ? `?${params}` : '')
-          window.history.replaceState({}, '', url)
-        })
-    }
+    if (!pendingCode) return
+    setConnecting(true)
+    exchangeCode(pendingCode)
+      .then((k) => {
+        setKey(k)
+        setKeyState(k)
+      })
+      .catch((err) => {
+        setConnectError(err instanceof Error ? err.message : 'unknown')
+      })
+      .finally(() => {
+        setConnecting(false)
+        const params = new URLSearchParams(window.location.search)
+        params.delete('code')
+        const url = window.location.pathname + (params.toString() ? `?${params}` : '')
+        window.history.replaceState({}, '', url)
+      })
+  }, [pendingCode])
+
+  // Keep `connected` in sync if the key changes in another tab.
+  useEffect(() => {
+    const onStorage = () => setKeyState(getKey())
+    window.addEventListener('storage', onStorage)
+    return () => window.removeEventListener('storage', onStorage)
   }, [])
 
   const connect = useCallback(async () => {
@@ -54,7 +76,24 @@ export function AIProvider({ children }: { children: ReactNode }) {
     setConnectError(null)
     try {
       const url = await buildAuthUrl()
+
+      // Mobile browsers open window.open() as a new tab, not a popup — the
+      // postMessage handshake breaks. Use a full-page redirect instead; we come
+      // back to the callback URL with `?code=` and exchange it in the useEffect.
+      const isMobile = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent)
+      if (isMobile) {
+        window.location.assign(url)
+        return
+      }
+
       const popup = window.open(url, POPUP_NAME, 'width=520,height=720')
+
+      // Popup blocked (common on desktop too) — fall back to full-page redirect.
+      if (!popup) {
+        window.location.assign(url)
+        return
+      }
+
       const code = await new Promise<string>((resolve, reject) => {
         const onMsg = (e: MessageEvent) => {
           if (e.origin !== window.location.origin) return
@@ -92,6 +131,11 @@ export function AIProvider({ children }: { children: ReactNode }) {
     setKeyState(null)
   }, [])
 
+  const skip = useCallback(() => {
+    localStorage.setItem(SKIP_STORAGE, '1')
+    setSkipped(true)
+  }, [])
+
   const generate = useCallback(
     async (messages: ChatMessage[]) => {
       if (!key) throw new Error('Not connected')
@@ -101,8 +145,8 @@ export function AIProvider({ children }: { children: ReactNode }) {
   )
 
   const value = useMemo<AIContextValue>(
-    () => ({ connected: !!key, connecting, connectError, connect, disconnect, generate }),
-    [key, connecting, connectError, connect, disconnect, generate],
+    () => ({ connected: !!key, connecting, connectError, skipped, connect, disconnect, skip, generate }),
+    [key, connecting, connectError, skipped, connect, disconnect, skip, generate],
   )
 
   return <AIContext.Provider value={value}>{children}</AIContext.Provider>

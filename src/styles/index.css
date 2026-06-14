@@ -1361,6 +1361,32 @@ img {
   .shuffle-card {
     width: 92px;
   }
+
+  /* Shrink the TopBar controls (AI, language, theme) on small screens. */
+  .topbar-right {
+    gap: 6px;
+  }
+
+  .icon-btn {
+    width: 34px;
+    height: 34px;
+    font-size: 1rem;
+  }
+
+  .pill-btn {
+    height: 34px;
+    padding: 0 10px;
+    font-size: 0.75rem;
+  }
+
+  .ai-icon-spark {
+    font-size: 0.85rem;
+  }
+
+  .ai-icon-dot {
+    top: 4px;
+    right: 6px;
+  }
 }
 
 /* ============================================================

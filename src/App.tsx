@@ -11,12 +11,12 @@ import Journal from './screens/Journal'
 import CardOfDay from './screens/CardOfDay'
 
 export default function App() {
-  const { connected } = useAI()
+  const { connected, skipped } = useAI()
 
   return (
     <ReadingProvider>
       <Routes>
-        <Route path="/" element={connected ? <Home /> : <Navigate to="/connect-ai" replace />} />
+        <Route path="/" element={connected || skipped ? <Home /> : <Navigate to="/connect-ai" replace />} />
         <Route path="/connect-ai" element={<ConnectAI />} />
         <Route path="/question" element={<Question />} />
         <Route path="/shuffle" element={<Shuffle />} />

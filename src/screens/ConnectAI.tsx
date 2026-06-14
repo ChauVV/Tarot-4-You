@@ -6,7 +6,7 @@ import { useAI } from '../context/AIContext'
 import { useLang } from '../context/LanguageContext'
 
 export default function ConnectAI() {
-  const { connected, connecting, connectError, connect, disconnect } = useAI()
+  const { connected, connecting, connectError, connect, disconnect, skip } = useAI()
   const { t } = useLang()
   const navigate = useNavigate()
 
@@ -64,7 +64,13 @@ export default function ConnectAI() {
               >
                 {connecting ? t('aiConnecting') : connectError ? t('connectAIRetry') : t('aiConnect')}
               </button>
-              <button className="btn-link" onClick={() => navigate('/')}>
+              <button
+                className="btn-link"
+                onClick={() => {
+                  skip()
+                  navigate('/')
+                }}
+              >
                 {t('connectAISkip')}
               </button>
             </div>

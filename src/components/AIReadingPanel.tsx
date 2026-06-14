@@ -87,7 +87,7 @@ export default function AIReadingPanel({ active, topic, question, spread, drawn 
     >
       <div className="summary-head">
         <h3 className="summary-title">
-          ✦ {t('summary')} ✦{showAI && <span className="ai-badge">✨ AI</span>}
+          ✦ {t('summary')} ✦
         </h3>
       </div>
 

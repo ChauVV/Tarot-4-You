@@ -102,10 +102,7 @@ export default function CardOfDay() {
             {/* AI result — hides default when successful */}
             {showAI && (
               <>
-                <p className="interp-text">
-                  <span className="ai-badge" style={{ marginRight: 6 }}>✨ AI</span>
-                  {aiText}
-                </p>
+                <p className="interp-text">{aiText}</p>
                 <button className="btn btn-ghost small summary-action" onClick={runAI}>
                   {t('aiRegenerate')}
                 </button>
