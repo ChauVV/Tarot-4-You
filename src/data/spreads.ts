@@ -84,5 +84,6 @@ export const TOPICS: { id: Topic; label: Bi; icon: string }[] = [
   { id: 'love', label: { vi: 'Tình yêu', en: 'Love' }, icon: '♥' },
   { id: 'career', label: { vi: 'Sự nghiệp', en: 'Career' }, icon: '✦' },
   { id: 'finance', label: { vi: 'Tài chính', en: 'Finance' }, icon: '◈' },
+  { id: 'health', label: { vi: 'Sức khỏe', en: 'Health' }, icon: '❀' },
   { id: 'custom', label: { vi: 'Câu hỏi tự do', en: 'Free Question' }, icon: '✎' },
 ]

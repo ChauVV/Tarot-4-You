@@ -219,6 +219,36 @@ img {
   transform: translateY(-1px);
 }
 
+/* Home icon button (logo image) in TopBar — no frame, slightly larger */
+.home-icon-btn {
+  padding: 0;
+  width: 50px;
+  height: 50px;
+  border: none;
+  background: none;
+  backdrop-filter: none;
+  overflow: visible;
+}
+
+.home-icon-btn:hover {
+  background: none;
+  border: none;
+  transform: none;
+}
+
+.home-icon-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  transition: filter 0.2s;
+}
+
+/* Highlight on hover without moving the icon. */
+.home-icon-btn:hover .home-icon-img {
+  filter: brightness(1.15) drop-shadow(0 0 6px var(--glow));
+}
+
 /* AI icon button in TopBar */
 .ai-icon-btn {
   position: relative;
@@ -524,48 +554,120 @@ img {
    ============================================================ */
 .topic-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-  gap: 10px;
-  margin-bottom: 24px;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 14px;
+  margin-bottom: 26px;
 }
 
 .topic-chip {
+  position: relative;
   cursor: pointer;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 10px;
-  padding: 14px 16px;
-  border-radius: var(--radius-sm);
+  gap: 12px;
+  padding: 22px 14px 18px;
+  border-radius: var(--radius);
   border: 1px solid var(--border-soft);
-  background: var(--surface);
+  background:
+    radial-gradient(130% 90% at 50% 0%, var(--accent-soft), transparent 62%),
+    var(--surface);
   color: var(--text);
-  font-size: 0.95rem;
-  font-weight: 500;
-  text-align: left;
-  transition: all 0.18s;
+  font-size: 0.96rem;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+  text-align: center;
+  transition: transform 0.18s, border-color 0.18s, box-shadow 0.25s, background 0.2s;
   backdrop-filter: blur(6px);
 }
 
 .topic-chip:hover {
   border-color: var(--accent);
-  transform: translateY(-2px);
+  transform: translateY(-3px);
+  box-shadow: 0 12px 30px var(--accent-soft);
 }
 
 .topic-chip.active {
   border-color: var(--accent);
-  background: var(--accent-soft);
-  box-shadow: 0 0 0 1px var(--accent) inset;
+  background:
+    radial-gradient(130% 90% at 50% 0%, var(--accent-soft), transparent 70%),
+    var(--accent-soft);
+  box-shadow: 0 0 0 1px var(--accent) inset, 0 14px 34px var(--accent-soft);
 }
 
 .topic-icon {
-  font-size: 1.3rem;
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
   color: var(--accent);
+  font-size: 1.5rem;
+  transition: transform 0.2s, background 0.2s, box-shadow 0.2s;
+}
+
+.topic-chip:hover .topic-icon,
+.topic-chip.active .topic-icon {
+  background: var(--accent-soft);
+  transform: scale(1.08);
+  box-shadow: 0 0 16px var(--accent-soft);
 }
 
 .field-label {
   display: block;
   font-weight: 600;
   margin-bottom: 8px;
+}
+
+/* Drill-down: subtopic chips reuse .topic-chip; this is their container. */
+.subtopic-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 10px;
+  margin-bottom: 22px;
+}
+
+/* Suggested-question chips */
+.suggest-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 22px;
+}
+
+.suggest-chip {
+  cursor: pointer;
+  text-align: left;
+  padding: 11px 15px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-soft);
+  background: var(--surface);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 0.92rem;
+  line-height: 1.4;
+  transition: all 0.16s;
+  backdrop-filter: blur(6px);
+}
+
+.suggest-chip::before {
+  content: '✦';
+  color: var(--accent);
+  margin-right: 8px;
+  font-size: 0.8rem;
+}
+
+.suggest-chip:hover {
+  border-color: var(--accent);
+  transform: translateY(-1px);
+}
+
+.suggest-chip.active {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  box-shadow: 0 0 0 1px var(--accent) inset;
 }
 
 .question-input {
@@ -1129,6 +1231,191 @@ img {
   margin-top: 14px;
 }
 
+/* Two-part summary blocks */
+.summary-block+.summary-block {
+  margin-top: 20px;
+  padding-top: 18px;
+  border-top: 1px solid var(--border-soft);
+}
+
+/* Per-card AI sections (Overview / Message for you) */
+.ai-section {
+  margin-top: 12px;
+  text-align: left;
+}
+
+.ai-section-label {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 4px;
+}
+
+.auto-saved-note {
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--text-dim);
+  margin: 0;
+}
+
+.ai-limit-note {
+  text-align: left;
+  margin-bottom: 16px;
+  padding: 14px 16px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--danger);
+  background: color-mix(in srgb, var(--danger) 12%, transparent);
+}
+
+.ai-limit-note strong {
+  display: block;
+  color: var(--danger);
+  margin-bottom: 6px;
+  font-size: 0.95rem;
+}
+
+.ai-limit-note p {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: var(--text);
+}
+
+/* ============================================================
+   Follow-up question (after an AI reading)
+   ============================================================ */
+.followup {
+  margin: 22px auto 0;
+  max-width: 640px;
+  padding: 22px 24px;
+  border-radius: var(--radius);
+  border: 1px solid var(--accent-2);
+  background:
+    radial-gradient(140% 120% at 50% 0%, color-mix(in srgb, var(--accent-2) 14%, transparent), transparent 70%),
+    var(--surface);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(8px);
+}
+
+.followup-head {
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.followup-spark {
+  color: var(--accent);
+  font-size: 1.2rem;
+}
+
+.followup-title {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: 1px;
+  color: var(--accent);
+  margin: 4px 0 6px;
+  font-size: 1.05rem;
+  text-transform: uppercase;
+}
+
+.followup-hint {
+  margin: 0;
+  font-size: 0.88rem;
+  color: var(--text-dim);
+}
+
+.followup-suggests {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  margin-bottom: 14px;
+}
+
+.followup-chip {
+  cursor: pointer;
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  transition: all 0.16s;
+}
+
+.followup-chip:not(:disabled):hover {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  transform: translateY(-1px);
+}
+
+.followup-chip:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.followup-input-row {
+  display: flex;
+  gap: 10px;
+  align-items: stretch;
+}
+
+.followup-input-row .question-input {
+  flex: 1;
+}
+
+.followup-input-row .btn {
+  align-self: stretch;
+  white-space: nowrap;
+}
+
+.followup-thread {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+.followup-thread--journal {
+  margin: 16px auto 0;
+  max-width: 640px;
+}
+
+.followup-item {
+  text-align: left;
+  padding: 14px 16px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-soft);
+  background: var(--surface);
+}
+
+.followup-q {
+  font-family: var(--font-serif);
+  font-style: italic;
+  color: var(--accent);
+  margin: 0 0 8px;
+  font-size: 1.05rem;
+}
+
+.followup-a {
+  font-family: var(--font-serif);
+  font-size: 1.08rem;
+  line-height: 1.6;
+  color: var(--text);
+  margin: 0;
+  white-space: pre-wrap;
+}
+
+@media (max-width: 560px) {
+  .followup-input-row {
+    flex-direction: column;
+  }
+}
+
 /* AI reading panel */
 .ai-panel {
   margin: 18px auto 0;
@@ -1382,6 +1669,11 @@ img {
     width: 34px;
     height: 34px;
     font-size: 1rem;
+  }
+
+  .home-icon-btn {
+    width: 40px;
+    height: 40px;
   }
 
   .pill-btn {
@@ -1754,7 +2046,9 @@ img {
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .credits-ad-label {

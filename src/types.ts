@@ -51,7 +51,21 @@ export interface Spread {
   layout: 'single' | 'row3' | 'choice5'
 }
 
-export type Topic = 'daily' | 'love' | 'career' | 'finance' | 'custom'
+export type Topic = 'daily' | 'love' | 'career' | 'finance' | 'health' | 'custom'
+
+/** A specific angle within a topic, with suggested questions to guide the user. */
+export interface SubTopic {
+  id: string
+  label: Bi
+  icon: string
+  questions: Bi[]
+}
+
+/** One AI-generated follow-up exchange within a reading. */
+export interface FollowUp {
+  question: string
+  answer: string
+}
 
 export interface JournalEntry {
   id: string
@@ -61,6 +75,13 @@ export interface JournalEntry {
   question: string
   spreadId: string
   cards: { cardId: string; reversed: boolean }[]
-  /** AI-generated summary, saved when the reading was interpreted by AI. */
+  /** Legacy single-block AI summary (older entries). */
   aiSummary?: string
+  /** Per-card AI interpretation (overview + message), aligned with `cards`. */
+  aiCards?: { overview: string; message: string }[]
+  /** Two-part AI summary. */
+  aiMystic?: string
+  aiAdvice?: string
+  /** Follow-up Q&A asked within this reading. */
+  followups?: FollowUp[]
 }

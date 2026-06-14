@@ -49,6 +49,16 @@ const TOPIC_LENS: Record<Topic, Lens> = {
       en: 'On finances, be cautious of risk, emotional spending, and commitments that are not yet clear.',
     },
   },
+  health: {
+    up: {
+      vi: 'Về sức khỏe, lá bài khích lệ bạn lắng nghe cơ thể, giữ sự cân bằng và chăm sóc bản thân một cách dịu dàng.',
+      en: 'For health, the card encourages you to listen to your body, keep balance, and care for yourself gently.',
+    },
+    rev: {
+      vi: 'Về sức khỏe, hãy chú ý tới căng thẳng tích tụ, nghỉ ngơi chưa đủ hoặc thói quen cần điều chỉnh.',
+      en: 'For health, watch for built-up stress, insufficient rest, or habits that need adjusting.',
+    },
+  },
   daily: {
     up: {
       vi: 'Cho ngày hôm nay, hãy mang theo năng lượng này như một lời nhắc tích cực trong từng lựa chọn nhỏ.',

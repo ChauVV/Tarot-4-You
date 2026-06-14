@@ -4,11 +4,11 @@ import { useTheme } from '../context/ThemeContext'
 import { useAI } from '../context/AIContext'
 
 interface Props {
-  /** Show a back button instead of doing nothing. */
+  /** Kept for API compatibility; the home icon now always shows. */
   showBack?: boolean
 }
 
-export default function TopBar({ showBack }: Props) {
+export default function TopBar(_props: Props) {
   const { lang, toggleLang } = useLang()
   const { theme, toggleTheme } = useTheme()
   const { connected, connecting, disconnect } = useAI()
@@ -26,21 +26,9 @@ export default function TopBar({ showBack }: Props) {
   return (
     <header className="topbar">
       <div className="topbar-left">
-        {showBack ? (
-          <button className="icon-btn" onClick={() => navigate('/')} aria-label="Home">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden>
-              <path
-                d="M3 11.2 12 4l9 7.2M5 9.8V20h5v-6h4v6h5V9.8"
-                stroke="currentColor"
-                strokeWidth="1.8"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </button>
-        ) : (
-          <span className="topbar-spacer" />
-        )}
+        <button className="icon-btn home-icon-btn" onClick={() => navigate('/')} aria-label="Home">
+          <img src="/icon.png" alt="Tarot 4 You" className="home-icon-img" />
+        </button>
         {/* Credits badge hidden while readings are free. Re-enable with the
             credit gating in Question.tsx when we want to monetize. */}
       </div>

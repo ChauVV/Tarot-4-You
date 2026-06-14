@@ -38,6 +38,14 @@ export function useJournal() {
     })
   }, [])
 
+  const update = useCallback((id: string, patch: Partial<JournalEntry>) => {
+    setEntries((prev) => {
+      const next = prev.map((e) => (e.id === id ? { ...e, ...patch } : e))
+      save(next)
+      return next
+    })
+  }, [])
+
   const remove = useCallback((id: string) => {
     setEntries((prev) => {
       const next = prev.filter((e) => e.id !== id)
@@ -51,7 +59,7 @@ export function useJournal() {
     setEntries([])
   }, [])
 
-  return { entries, add, remove, clear }
+  return { entries, add, update, remove, clear }
 }
 
 /** Stable-ish id without external deps. */

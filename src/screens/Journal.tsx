@@ -119,48 +119,104 @@ export default function Journal() {
                                   </>
                                 )}
                                 <TarotCardView drawn={d} faceUp showLabel />
-                                <div className="interp interp-static">
-                                  <p className="interp-keywords">
-                                    <span className="kw-label">{t('keywords')}:</span> {bi(m.keywords)}
-                                  </p>
-                                  <p className="interp-text">{bi(m.text)}</p>
-                                  <div className="interp-deep">
-                                    <button
-                                      className="deep-toggle"
-                                      onClick={() => toggleDeep(`${e.id}:${i}`)}
-                                      aria-expanded={deepKeys.has(`${e.id}:${i}`)}
-                                    >
-                                      <span className="deep-label">✦ {t('inDepth')}</span>
-                                      <span className={`deep-chevron ${deepKeys.has(`${e.id}:${i}`) ? 'open' : ''}`}>
-                                        ›
-                                      </span>
-                                    </button>
-                                    <AnimatePresence>
-                                      {deepKeys.has(`${e.id}:${i}`) && (
-                                        <motion.div
-                                          className="deep-body"
-                                          initial={{ opacity: 0, height: 0 }}
-                                          animate={{ opacity: 1, height: 'auto' }}
-                                          exit={{ opacity: 0, height: 0 }}
-                                          transition={{ duration: 0.3 }}
+                                {(() => {
+                                  const aiCard = e.aiCards?.[i]
+                                  if (aiCard && (aiCard.overview || aiCard.message)) {
+                                    return (
+                                      <div className="interp interp-static">
+                                        <p className="interp-keywords">
+                                          <span className="kw-label">{t('keywords')}:</span> {bi(m.keywords)}
+                                        </p>
+                                        {aiCard.overview && (
+                                          <div className="ai-section">
+                                            <span className="ai-section-label">✦ {t('overview')}</span>
+                                            <p className="interp-text">{aiCard.overview}</p>
+                                          </div>
+                                        )}
+                                        {aiCard.message && (
+                                          <div className="ai-section">
+                                            <span className="ai-section-label">✦ {t('messageForYou')}</span>
+                                            <p className="interp-text">{aiCard.message}</p>
+                                          </div>
+                                        )}
+                                      </div>
+                                    )
+                                  }
+                                  return (
+                                    <div className="interp interp-static">
+                                      <p className="interp-keywords">
+                                        <span className="kw-label">{t('keywords')}:</span> {bi(m.keywords)}
+                                      </p>
+                                      <p className="interp-text">{bi(m.text)}</p>
+                                      <div className="interp-deep">
+                                        <button
+                                          className="deep-toggle"
+                                          onClick={() => toggleDeep(`${e.id}:${i}`)}
+                                          aria-expanded={deepKeys.has(`${e.id}:${i}`)}
                                         >
-                                          <p className="interp-text">{bi(deepInterpret(d, pos, e.topic))}</p>
-                                        </motion.div>
-                                      )}
-                                    </AnimatePresence>
-                                  </div>
-                                </div>
+                                          <span className="deep-label">✦ {t('inDepth')}</span>
+                                          <span className={`deep-chevron ${deepKeys.has(`${e.id}:${i}`) ? 'open' : ''}`}>
+                                            ›
+                                          </span>
+                                        </button>
+                                        <AnimatePresence>
+                                          {deepKeys.has(`${e.id}:${i}`) && (
+                                            <motion.div
+                                              className="deep-body"
+                                              initial={{ opacity: 0, height: 0 }}
+                                              animate={{ opacity: 1, height: 'auto' }}
+                                              exit={{ opacity: 0, height: 0 }}
+                                              transition={{ duration: 0.3 }}
+                                            >
+                                              <p className="interp-text">{bi(deepInterpret(d, pos, e.topic))}</p>
+                                            </motion.div>
+                                          )}
+                                        </AnimatePresence>
+                                      </div>
+                                    </div>
+                                  )
+                                })()}
                               </div>
                             )
                           })}
                         </div>
 
                         <div className="reading-summary">
-                          <h4 className="summary-title">✦ {t('summary')} ✦</h4>
-                          <p className="summary-text">
-                            {e.aiSummary ? e.aiSummary : bi(summarize(drawn, spread))}
-                          </p>
+                          {e.aiMystic || e.aiAdvice ? (
+                            <>
+                              {e.aiMystic && (
+                                <div className="summary-block">
+                                  <h4 className="summary-title">✦ {t('mysticMessage')} ✦</h4>
+                                  <p className="summary-text">{e.aiMystic}</p>
+                                </div>
+                              )}
+                              {e.aiAdvice && (
+                                <div className="summary-block">
+                                  <h4 className="summary-title">✦ {t('combinedAdvice')} ✦</h4>
+                                  <p className="summary-text">{e.aiAdvice}</p>
+                                </div>
+                              )}
+                            </>
+                          ) : (
+                            <div className="summary-block">
+                              <h4 className="summary-title">✦ {t('summary')} ✦</h4>
+                              <p className="summary-text">
+                                {e.aiSummary ? e.aiSummary : bi(summarize(drawn, spread))}
+                              </p>
+                            </div>
+                          )}
                         </div>
+
+                        {e.followups && e.followups.length > 0 && (
+                          <div className="followup-thread followup-thread--journal">
+                            {e.followups.map((f, i) => (
+                              <div key={i} className="followup-item">
+                                <p className="followup-q">“{f.question}”</p>
+                                <p className="followup-a">{f.answer}</p>
+                              </div>
+                            ))}
+                          </div>
+                        )}
                       </motion.div>
                     )}
                   </AnimatePresence>

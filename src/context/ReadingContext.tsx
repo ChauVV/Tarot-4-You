@@ -1,8 +1,10 @@
 import { createContext, useContext, useMemo, useState, type ReactNode } from 'react'
-import type { DrawnCard, Topic } from '../types'
+import type { DrawnCard, SubTopic, Topic } from '../types'
 
 interface ReadingState {
   topic: Topic
+  /** The specific angle within the topic, e.g. "Current partner". */
+  subtopic: SubTopic | null
   question: string
   spreadId: string
   drawn: DrawnCard[]
@@ -10,6 +12,7 @@ interface ReadingState {
 
 interface ReadingContextValue extends ReadingState {
   setTopic: (t: Topic) => void
+  setSubtopic: (s: SubTopic | null) => void
   setQuestion: (q: string) => void
   setSpreadId: (id: string) => void
   setDrawn: (cards: DrawnCard[]) => void
@@ -18,10 +21,11 @@ interface ReadingContextValue extends ReadingState {
 
 const ReadingContext = createContext<ReadingContextValue | null>(null)
 
-const initial: ReadingState = { topic: 'daily', question: '', spreadId: 'daily', drawn: [] }
+const initial: ReadingState = { topic: 'daily', subtopic: null, question: '', spreadId: 'daily', drawn: [] }
 
 export function ReadingProvider({ children }: { children: ReactNode }) {
   const [topic, setTopic] = useState<Topic>(initial.topic)
+  const [subtopic, setSubtopic] = useState<SubTopic | null>(initial.subtopic)
   const [question, setQuestion] = useState(initial.question)
   const [spreadId, setSpreadId] = useState(initial.spreadId)
   const [drawn, setDrawn] = useState<DrawnCard[]>(initial.drawn)
@@ -29,21 +33,24 @@ export function ReadingProvider({ children }: { children: ReactNode }) {
   const value = useMemo<ReadingContextValue>(
     () => ({
       topic,
+      subtopic,
       question,
       spreadId,
       drawn,
       setTopic,
+      setSubtopic,
       setQuestion,
       setSpreadId,
       setDrawn,
       reset: () => {
         setTopic(initial.topic)
+        setSubtopic(initial.subtopic)
         setQuestion(initial.question)
         setSpreadId(initial.spreadId)
         setDrawn([])
       },
     }),
-    [topic, question, spreadId, drawn],
+    [topic, subtopic, question, spreadId, drawn],
   )
 
   return <ReadingContext.Provider value={value}>{children}</ReadingContext.Provider>

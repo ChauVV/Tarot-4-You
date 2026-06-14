@@ -135,9 +135,12 @@ async function callChat(key: string, messages: ChatMessage[], model: string): Pr
     const err = new Error(`AI error ${res.status}: ${detail.slice(0, 200)}`) as Error & {
       retriable?: boolean
       gone?: boolean
+      rateLimited?: boolean
     }
     // 404/"no endpoints" => model removed; 429/5xx => busy. Both: try the next model.
     err.gone = res.status === 404 || /no endpoints|not found/i.test(detail)
+    // Daily free-tier cap — retrying other free models won't help today.
+    err.rateLimited = res.status === 429 || /free-models-per-day|rate limit exceeded/i.test(detail)
     err.retriable =
       err.gone || res.status === 429 || res.status >= 500 || /rate.?limit|temporarily|overloaded/i.test(detail)
     throw err
