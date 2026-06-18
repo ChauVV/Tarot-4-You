@@ -2209,3 +2209,153 @@ img {
 .door-right .door-img {
   object-position: left center;
 }
+
+/* ============================================================
+   Mystical UI polish — titles, topic/spread cards, icons
+   (Layered on top of the base rules above.)
+   ============================================================ */
+
+/* Premium gradient titles with a soft aura. */
+.screen-title {
+  background: linear-gradient(105deg, var(--accent), var(--accent-2));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  filter: drop-shadow(0 1px 12px var(--glow));
+}
+
+/* ---- Topic / aspect cards ---- */
+.topic-chip {
+  overflow: hidden;
+  background:
+    radial-gradient(120% 80% at 50% -10%, var(--accent-soft), transparent 60%),
+    radial-gradient(120% 90% at 50% 120%, color-mix(in srgb, var(--accent-2) 20%, transparent), transparent 62%),
+    var(--surface);
+}
+
+/* Faint sweeping sheen across the card surface. */
+.topic-chip::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(115deg, transparent 35%, color-mix(in srgb, var(--accent) 22%, transparent) 50%, transparent 65%);
+  transform: translateX(-120%);
+  transition: transform 0.6s ease;
+  pointer-events: none;
+}
+.topic-chip:hover::after {
+  transform: translateX(120%);
+}
+
+.topic-chip.active {
+  box-shadow:
+    0 0 0 1px var(--accent) inset,
+    0 0 22px var(--accent-soft),
+    0 0 46px color-mix(in srgb, var(--accent-2) 34%, transparent);
+  animation: card-pulse 2.6s ease-in-out infinite;
+}
+
+@keyframes card-pulse {
+  0%, 100% {
+    box-shadow:
+      0 0 0 1px var(--accent) inset,
+      0 0 16px var(--accent-soft),
+      0 0 28px color-mix(in srgb, var(--accent-2) 26%, transparent);
+  }
+  50% {
+    box-shadow:
+      0 0 0 1px var(--accent) inset,
+      0 0 28px var(--accent-soft),
+      0 0 56px color-mix(in srgb, var(--accent-2) 48%, transparent);
+  }
+}
+
+/* Glowing icon aura. */
+.topic-icon {
+  background: radial-gradient(circle at 50% 35%, color-mix(in srgb, var(--accent) 28%, transparent), var(--surface-2));
+  box-shadow:
+    0 0 0 1px var(--border),
+    inset 0 0 14px color-mix(in srgb, var(--accent) 22%, transparent);
+}
+
+.topic-chip.active .topic-icon {
+  background: radial-gradient(circle at 50% 32%, var(--accent), color-mix(in srgb, var(--accent-2) 55%, var(--surface-2)));
+  color: #2a1a07;
+  box-shadow:
+    0 0 18px var(--accent-soft),
+    0 0 34px color-mix(in srgb, var(--accent-2) 42%, transparent);
+  animation: icon-float 3s ease-in-out infinite;
+}
+
+@keyframes icon-float {
+  0%, 100% { transform: translateY(0) scale(1.08); }
+  50% { transform: translateY(-3px) scale(1.13); }
+}
+
+/* ---- Spread cards ---- */
+.spread-card {
+  position: relative;
+  overflow: hidden;
+  padding-left: 22px;
+}
+
+/* Leading gradient accent bar. */
+.spread-card::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: linear-gradient(var(--accent), var(--accent-2));
+  opacity: 0.35;
+  transition: opacity 0.2s, width 0.2s, box-shadow 0.2s;
+}
+.spread-card:hover::before {
+  opacity: 0.7;
+}
+.spread-card.active::before {
+  opacity: 1;
+  width: 4px;
+  box-shadow: 0 0 14px var(--accent);
+}
+
+.spread-card.active {
+  background:
+    radial-gradient(150% 130% at 0% 0%, var(--accent-soft), transparent 58%),
+    var(--surface);
+  box-shadow:
+    0 0 0 1px var(--accent) inset,
+    0 0 26px color-mix(in srgb, var(--accent-2) 22%, transparent);
+}
+
+.spread-name {
+  background: linear-gradient(100deg, var(--accent), var(--accent-2));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+.spread-count {
+  padding: 3px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--accent-soft);
+  box-shadow: 0 0 12px color-mix(in srgb, var(--accent) 18%, transparent);
+}
+
+/* Suggested-question chips: subtle glow when chosen. */
+.suggest-chip.active {
+  box-shadow: 0 0 0 1px var(--accent) inset, 0 0 16px var(--accent-soft);
+}
+
+/* Respect reduced-motion: drop the looping glows/floats. */
+@media (prefers-reduced-motion: reduce) {
+  .topic-chip.active,
+  .topic-chip.active .topic-icon {
+    animation: none;
+  }
+}

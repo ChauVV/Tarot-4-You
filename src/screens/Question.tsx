@@ -79,15 +79,20 @@ export default function Question() {
             <motion.div key="step1" custom={dir} variants={variants} initial="initial" animate="animate" exit="exit">
               <h2 className="screen-title">{t('chooseTopic')}</h2>
               <div className="topic-grid">
-                {TOPICS.map((tp) => (
-                  <button
+                {TOPICS.map((tp, i) => (
+                  <motion.button
                     key={tp.id}
                     className={`topic-chip ${topic === tp.id ? 'active' : ''}`}
                     onClick={() => pickTopic(tp.id)}
+                    initial={{ opacity: 0, y: 14, scale: 0.97 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    transition={{ duration: 0.3, delay: i * 0.05, ease: 'easeOut' }}
+                    whileHover={{ y: -4 }}
+                    whileTap={{ scale: 0.96 }}
                   >
                     <span className="topic-icon">{tp.icon}</span>
                     <span>{bi(tp.label)}</span>
-                  </button>
+                  </motion.button>
                 ))}
               </div>
 
@@ -112,15 +117,20 @@ export default function Question() {
                     <>
                       <span className="field-label">{t('chooseAspect')}</span>
                       <div className="subtopic-grid">
-                        {subtopics.map((st) => (
-                          <button
+                        {subtopics.map((st, i) => (
+                          <motion.button
                             key={st.id}
                             className={`topic-chip ${subId === st.id ? 'active' : ''}`}
                             onClick={() => pickSubtopic(st.id)}
+                            initial={{ opacity: 0, y: 14, scale: 0.97 }}
+                            animate={{ opacity: 1, y: 0, scale: 1 }}
+                            transition={{ duration: 0.3, delay: i * 0.05, ease: 'easeOut' }}
+                            whileHover={{ y: -4 }}
+                            whileTap={{ scale: 0.96 }}
                           >
                             <span className="topic-icon">{st.icon}</span>
                             <span>{bi(st.label)}</span>
-                          </button>
+                          </motion.button>
                         ))}
                       </div>
                     </>
@@ -183,11 +193,16 @@ export default function Question() {
             <motion.div key="step3" custom={dir} variants={variants} initial="initial" animate="animate" exit="exit">
               <h2 className="screen-title">{t('chooseSpread')}</h2>
               <div className="spread-list">
-                {SPREADS.map((s) => (
-                  <button
+                {SPREADS.map((s, i) => (
+                  <motion.button
                     key={s.id}
                     className={`spread-card ${spreadId === s.id ? 'active' : ''}`}
                     onClick={() => setSpreadId(s.id)}
+                    initial={{ opacity: 0, y: 16 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.32, delay: i * 0.07, ease: 'easeOut' }}
+                    whileHover={{ y: -2 }}
+                    whileTap={{ scale: 0.99 }}
                   >
                     <div className="spread-card-head">
                       <span className="spread-name">{bi(s.name)}</span>
@@ -196,7 +211,7 @@ export default function Question() {
                       </span>
                     </div>
                     <p className="spread-desc">{bi(s.description)}</p>
-                  </button>
+                  </motion.button>
                 ))}
               </div>
 
