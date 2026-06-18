@@ -89,16 +89,17 @@ export const UI = {
   asking: { vi: 'Đang hỏi…', en: 'Asking…' },
 
   // Connect AI screen
-  connectAITitle: { vi: 'Kết nối AI', en: 'Connect AI' },
+  connectAITitle: { vi: 'Đăng nhập', en: 'Sign in' },
   connectAIDesc: {
-    vi: 'Tarot 4 You dùng OpenRouter để giải bài bằng AI hoàn toàn miễn phí. Kết nối tài khoản OpenRouter của bạn để bắt đầu.',
-    en: 'Tarot 4 You uses OpenRouter to deliver free AI readings. Connect your OpenRouter account to get started.',
+    vi: 'Tarot 4 You dùng OpenRouter để giải bài hoàn toàn miễn phí. Kết nối tài khoản OpenRouter của bạn để bắt đầu.',
+    en: 'Tarot 4 You uses OpenRouter to deliver free readings. Connect your OpenRouter account to get started.',
   },
-  connectAISkip: { vi: 'Không cần dùng AI', en: 'Continue without AI' },
+  connectAILogin: { vi: 'Đăng nhập', en: 'Sign in' },
+  connectAISkip: { vi: 'Không cần đăng nhập', en: 'Continue without signing in' },
   connectAIConnected: { vi: 'Đã kết nối OpenRouter ✓', en: 'OpenRouter connected ✓' },
   connectAIConnectedDesc: {
-    vi: 'Bạn đã kết nối thành công. Sẵn sàng trải nghiệm giải bài bằng AI!',
-    en: 'You are connected. Ready to enjoy AI-powered readings!',
+    vi: 'Bạn đã kết nối thành công. Sẵn sàng trải nghiệm giải bài!',
+    en: 'You are connected. Ready to enjoy your readings!',
   },
   connectAIContinue: { vi: 'Tiếp tục', en: 'Continue' },
   connectAIErrorTitle: { vi: 'Kết nối thất bại', en: 'Connection failed' },

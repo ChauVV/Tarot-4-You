@@ -9,12 +9,14 @@ import Draw from './screens/Draw'
 import Reading from './screens/Reading'
 import Journal from './screens/Journal'
 import CardOfDay from './screens/CardOfDay'
+import DoorTransition from './components/DoorTransition'
 
 export default function App() {
   const { connected, skipped } = useAI()
 
   return (
     <ReadingProvider>
+      <DoorTransition />
       <Routes>
         <Route path="/" element={connected || skipped ? <Home /> : <Navigate to="/connect-ai" replace />} />
         <Route path="/connect-ai" element={<ConnectAI />} />
